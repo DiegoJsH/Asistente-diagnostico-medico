@@ -1,0 +1,55 @@
+SOLUCIÓN: ARCHIVOS CORREGIDOS
+================================
+
+He corregido los problemas de sintaxis en Prolog.
+
+EL PROBLEMA ERA:
+- Caracteres especiales (acentos, ó, á, é, etc.)
+- Python 3.14 incompatible con Flask antiguo
+- Predicados con nombres incorrectos
+
+QUÉ CAMBIÉ:
+✓ knowledge_base.pl: Retiré acentos y caracteres especiales
+✓ app.py: Actualicé referencias a predicados
+✓ Cambié congestión_nasal → congestion_nasal
+✓ Cambié vómitos → vomitos
+✓ Cambié síntomas → sintomas
+✓ Cambié diagnósticos → diagnosticos
+✓ Cambié información → info
+✓ Cambié faringitis_estreptocócica → faringitis
+✓ Cambié resfriado_común → resfriado_comun
+
+CÓMO PROCEDER:
+==============
+
+1. TERMINA el servidor Python actual (Ctrl+C)
+
+2. LIMPIA dependencias antiguas (OPCIONAL pero recomendado):
+   pip uninstall pyswip -y
+   pip uninstall Flask -y
+
+3. REINSTALA las dependencias:
+   cd python
+   pip install -r requirements.txt
+
+4. INICIA Python nuevamente:
+   python3 app.py
+
+Deberías ver:
+   ✓ Starting Python server...
+   ✓ Listening on http://localhost:5000
+   ✓ SIN ERRORES de Prolog
+
+5. En otra terminal, inicia Scala:
+   cd scala
+   sbt run
+
+Deberías ver:
+   ✓ [OK] Server Scala active on http://localhost:8080
+
+6. Abre navegador:
+   http://localhost:8080
+
+¡LISTO!
+
+Si aún hay errores, avísame qué dice exactamente.

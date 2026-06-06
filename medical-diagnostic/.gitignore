@@ -1,0 +1,59 @@
+# v0 sandbox internal files
+__v0_runtime_loader.js
+__v0_devtools.tsx
+__v0_jsx-dev-runtime.ts
+.snowflake/
+.v0-trash/
+.vercel/
+
+# Environment variables (local development only)
+.env.local
+.env.*.local
+
+# Node/Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+
+# Scala/SBT
+target/
+.bsp/
+.idea/
+*.class
+*.jar
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Prolog
+*.pl~
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# IDEs
+.vscode/
+*.swp
+*.swo
+*~
+.idea/
+
+# Local development
+.env
+.env.local
