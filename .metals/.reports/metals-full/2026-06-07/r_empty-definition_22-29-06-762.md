@@ -1,3 +1,19 @@
+error id: file:///C:/Users/angel/Downloads/Proyecto%20Lenguaje%20de%20Programación/Asistente-diagnostico-medico/medical-diagnostic/scala/src/main/scala/Main.scala:java/net/HttpURLConnection#disconnect().
+file:///C:/Users/angel/Downloads/Proyecto%20Lenguaje%20de%20Programación/Asistente-diagnostico-medico/medical-diagnostic/scala/src/main/scala/Main.scala
+empty definition using pc, found symbol in pc: java/net/HttpURLConnection#disconnect().
+empty definition using semanticdb
+empty definition using fallback
+non-local guesses:
+	 -connection/disconnect.
+	 -connection/disconnect#
+	 -connection/disconnect().
+	 -scala/Predef.connection.disconnect.
+	 -scala/Predef.connection.disconnect#
+	 -scala/Predef.connection.disconnect().
+offset: 7896
+uri: file:///C:/Users/angel/Downloads/Proyecto%20Lenguaje%20de%20Programación/Asistente-diagnostico-medico/medical-diagnostic/scala/src/main/scala/Main.scala
+text:
+```scala
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.io.Source
@@ -77,9 +93,6 @@ object MedicalDiagnosticServer {
   /**
    * Iniciar servidor web HTTP embebido
    */
-/**
-   * Iniciar servidor web HTTP embebido
-   */
   def startWebServer(): Unit = {
     val server = com.sun.net.httpserver.HttpServer.create(
       new java.net.InetSocketAddress(SCALA_PORT),
@@ -91,10 +104,9 @@ object MedicalDiagnosticServer {
       def handle(exchange: com.sun.net.httpserver.HttpExchange): Unit = {
         if (exchange.getRequestMethod == "GET") {
           val htmlContent = getHTMLContent()
-          val bytes = htmlContent.getBytes("UTF-8") // <-- Fix UTF-8
           exchange.getResponseHeaders.set("Content-Type", "text/html; charset=UTF-8")
-          exchange.sendResponseHeaders(200, bytes.length)
-          exchange.getResponseBody.write(bytes)
+          exchange.sendResponseHeaders(200, htmlContent.getBytes.length)
+          exchange.getResponseBody.write(htmlContent.getBytes)
           exchange.close()
         }
       }
@@ -114,20 +126,18 @@ object MedicalDiagnosticServer {
             
             // Llamar a Python
             val result = callPythonDiagnose(symptomsJson)
-            val bytes = result.getBytes("UTF-8") // <-- Fix UTF-8
             
             exchange.getResponseHeaders.set("Content-Type", "application/json; charset=UTF-8")
             exchange.getResponseHeaders.set("Access-Control-Allow-Origin", "*")
-            exchange.sendResponseHeaders(200, bytes.length)
-            exchange.getResponseBody.write(bytes)
+            exchange.sendResponseHeaders(200, result.getBytes.length)
+            exchange.getResponseBody.write(result.getBytes)
             exchange.close()
           } catch {
             case e: Exception =>
               val error = s"""{"error": "${e.getMessage}"}"""
-              val errorBytes = error.getBytes("UTF-8")
               exchange.getResponseHeaders.set("Content-Type", "application/json")
-              exchange.sendResponseHeaders(500, errorBytes.length)
-              exchange.getResponseBody.write(errorBytes)
+              exchange.sendResponseHeaders(500, error.getBytes.length)
+              exchange.getResponseBody.write(error.getBytes)
               exchange.close()
           }
         }
@@ -139,11 +149,10 @@ object MedicalDiagnosticServer {
       def handle(exchange: com.sun.net.httpserver.HttpExchange): Unit = {
         if (exchange.getRequestMethod == "GET") {
           val result = callPythonEndpoint("/symptoms")
-          val bytes = result.getBytes("UTF-8") // <-- Fix UTF-8
           exchange.getResponseHeaders.set("Content-Type", "application/json; charset=UTF-8")
           exchange.getResponseHeaders.set("Access-Control-Allow-Origin", "*")
-          exchange.sendResponseHeaders(200, bytes.length)
-          exchange.getResponseBody.write(bytes)
+          exchange.sendResponseHeaders(200, result.getBytes.length)
+          exchange.getResponseBody.write(result.getBytes)
           exchange.close()
         }
       }
@@ -154,11 +163,10 @@ object MedicalDiagnosticServer {
       def handle(exchange: com.sun.net.httpserver.HttpExchange): Unit = {
         if (exchange.getRequestMethod == "GET") {
           val result = callPythonEndpoint("/diseases")
-          val bytes = result.getBytes("UTF-8") // <-- Fix UTF-8
           exchange.getResponseHeaders.set("Content-Type", "application/json; charset=UTF-8")
           exchange.getResponseHeaders.set("Access-Control-Allow-Origin", "*")
-          exchange.sendResponseHeaders(200, bytes.length)
-          exchange.getResponseBody.write(bytes)
+          exchange.sendResponseHeaders(200, result.getBytes.length)
+          exchange.getResponseBody.write(result.getBytes)
           exchange.close()
         }
       }
@@ -174,10 +182,9 @@ object MedicalDiagnosticServer {
           "python_api": "$PYTHON_API_URL",
           "timestamp": "${java.time.LocalDateTime.now()}"
         }"""
-        val bytes = status.getBytes("UTF-8") // <-- Fix UTF-8
         exchange.getResponseHeaders.set("Content-Type", "application/json; charset=UTF-8")
-        exchange.sendResponseHeaders(200, bytes.length)
-        exchange.getResponseBody.write(bytes)
+        exchange.sendResponseHeaders(200, status.getBytes.length)
+        exchange.getResponseBody.write(status.getBytes)
         exchange.close()
       }
     })
@@ -231,7 +238,7 @@ object MedicalDiagnosticServer {
       
       val response = scala.io.Source.fromInputStream(connection.getInputStream)("UTF-8").mkString
       
-      connection.disconnect()
+      connection.@@disconnect()
       response
     } catch {
       case e: Exception =>
@@ -673,47 +680,25 @@ object MedicalDiagnosticServer {
             
             // Mostrar diagnósticos
             const diagnosisHtml = diagnosisList.map(diagnosis => {
-                // Calcular el porcentaje y color
+                // Calcular el porcentaje
                 const porcentaje = Math.round(diagnosis.confianza * 100);
-                let colorClase = '#dc3545';
-                if (porcentaje >= 85) colorClase = '#28a745';
-                else if (porcentaje >= 50) colorClase = '#ffc107';
-                const textColor = porcentaje >= 50 && porcentaje < 85 ? '#333' : 'white';
                 
-                // Procesar el nivel de Triaje
-                const triaje = diagnosis.triaje || 'amarillo';
-                let triajeHtml = '';
-                let borderStyle = 'border-left: 4px solid #667eea;'; // Estilo por defecto
-                
-                if (triaje === 'rojo') {
-                    triajeHtml = `<div style="background-color: #fee2e2; color: #991b1b; padding: 8px; border-radius: 5px; margin-bottom: 12px; font-weight: bold; font-size: 13px; border-left: 4px solid #dc2626;">URGENCIA ALTA: Acudir a emergencias inmediatamente</div>`;
-                    borderStyle = 'border-left: 4px solid #dc2626; background-color: #fffafb;'; // Resaltar tarjeta
-                } else if (triaje === 'amarillo') {
-                    triajeHtml = `<div style="background-color: #fef3c7; color: #92400e; padding: 8px; border-radius: 5px; margin-bottom: 12px; font-weight: bold; font-size: 13px; border-left: 4px solid #d97706;">PRECAUCIÓN: Agendar cita médica para evaluación</div>`;
-                    borderStyle = 'border-left: 4px solid #d97706;';
-                } else {
-                    triajeHtml = `<div style="background-color: #dcfce7; color: #166534; padding: 8px; border-radius: 5px; margin-bottom: 12px; font-weight: bold; font-size: 13px; border-left: 4px solid #16a34a;">ESTABLE: Manejo de síntomas en casa</div>`;
-                    borderStyle = 'border-left: 4px solid #16a34a;';
+                // Asignar color según el nivel de confianza
+                let colorClase = '#dc3545'; // Rojo por defecto (< 50%)
+                if (porcentaje >= 85) {
+                    colorClase = '#28a745'; // Verde para alta confianza
+                } else if (porcentaje >= 50) {
+                    colorClase = '#ffc107'; // Amarillo/Naranja para media confianza
+                    // Si es amarillo, cambiamos el texto a oscuro para que se lea bien
                 }
 
-                // Extraer variables asegurando compatibilidad con/sin tilde
-                const textoDescripcion = diagnosis.descripción || diagnosis.descripcion || 'Información no disponible.';
-                const especialista = diagnosis.especialista || 'Médico General';
+                const textColor = porcentaje >= 50 && porcentaje < 85 ? '#333' : 'white';
                 
                 return `
-                <div class="diagnosis-card" style="padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); ${borderStyle}">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                        <h3 style="margin: 0; font-size: 18px; color: #2d3748;">${formatSymptomName(diagnosis.enfermedad)}</h3>
-                        <span class="confidence" style="background-color: ${colorClase}; color: ${textColor}; padding: 5px 12px; font-size: 13px;">Confianza: ${porcentaje}%</span>
-                    </div>
-                    
-                    ${triajeHtml}
-                    
-                    <p class="diagnosis-description" style="margin-bottom: 12px; color: #4a5568; font-size: 14px; line-height: 1.5;">${textoDescripcion}</p>
-                    
-                    <div style="background-color: #ebf8ff; color: #2b6cb0; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: 600; display: inline-block;">
-                        👨‍⚕️ Especialista recomendado: ${especialista}
-                    </div>
+                <div class="diagnosis-card">
+                    <h3>${formatSymptomName(diagnosis.enfermedad)}</h3>
+                    <p class="diagnosis-description" style="margin-bottom: 12px; color: #555; font-size: 14px;">${diagnosis.descripcion}</p>
+                    <span class="confidence" style="background-color: ${colorClase}; color: ${textColor};">Confianza: ${porcentaje}%</span>
                 </div>
                 `;
             }).join('');
@@ -748,3 +733,10 @@ object MedicalDiagnosticServer {
 </html>"""
   }
 }
+
+```
+
+
+#### Short summary: 
+
+empty definition using pc, found symbol in pc: java/net/HttpURLConnection#disconnect().

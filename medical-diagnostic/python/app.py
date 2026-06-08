@@ -10,7 +10,7 @@ import json
 import os
 
 app = Flask(__name__)
-
+app.config['JSON_AS_ASCII'] = False
 # Initialize Prolog
 prolog = Prolog()
 
@@ -61,9 +61,14 @@ def diagnose():
         diagnosticos_con_info = []
         for diagnosis in diagnoses:
             info = get_diagnosis_info(str(diagnosis))
+            triaje_lvl = get_diagnosis_triaje(str(diagnosis))
+            specialist = get_diagnosis_specialist(str(diagnosis))
+            
             diagnosticos_con_info.append({
                 'enfermedad': str(diagnosis),
-                'descripcion': info,
+                'descripción': info,
+                'triaje': triaje_lvl,    
+                'especialista': specialist,   
                 'confianza': calculate_confidence(prolog_symptoms, diagnosis)
             })
         
@@ -112,7 +117,12 @@ def get_diagnoses_manual(symptoms):
     """Get diagnoses manually (fallback)"""
     diagnoses = []
     symptom_str = str(symptoms)
-    
+    # Dengue
+    if all(s in symptom_str for s in ['fiebre', 'dolor_articular', 'fatiga']):
+        diagnoses.append('dengue')
+    # Apendicitis
+    if all(s in symptom_str for s in ['dolor_abdominal', 'vomitos']):
+        diagnoses.append('apendicitis')
     # Flu
     if all(s in symptom_str for s in ['fiebre', 'tos', 'fatiga', 'cuerpo_adolorido']):
         diagnoses.append('gripe')
@@ -138,21 +148,46 @@ def get_diagnoses_manual(symptoms):
     return diagnoses
 
 def get_diagnosis_info(diagnosis):
-    """Get information about a disease"""
-    info_map = {
-        'gripe': 'Influenza. Requires rest, fluids and antivirals in severe cases.',
-        'resfriado_comun': 'Common cold. Rest and symptom medications.',
-        'faringitis': 'Bacterial pharyngitis. Requires antibiotics. Consult a doctor.',
-        'gastroenteritis': 'Gastroenteritis. Stay hydrated. Consult if persists.',
-        'varicela': 'Chickenpox. Isolation recommended. Consult your doctor.',
-        'alergia': 'Allergic reaction. Avoid allergens. Consider antihistamines.',
-        'migrana': 'Migraine. Rest in dark and quiet environment recommended.'
-    }
-    return info_map.get(diagnosis.lower(), 'Information not available.')
+    """Get information about a disease directly from Prolog"""
+    try:
+        # Hacemos la consulta directa a Prolog
+        for result in prolog.query(f"obtener_informacion({diagnosis}, Info)"):
+            info = result['Info']
+            # pyswip a veces devuelve bytes, decodificamos por seguridad
+            if isinstance(info, bytes):
+                return info.decode('utf-8')
+            return str(info)
+    except Exception as e:
+        print(f"Error querying Prolog info: {e}")
+    
+    return 'Información médica no disponible.'
+
+def get_diagnosis_triaje(diagnosis):
+    """Obtiene el nivel de triaje de la enfermedad desde Prolog"""
+    try:
+        for result in prolog.query(f"obtener_triaje({diagnosis}, Nivel)"):
+            return str(result['Nivel'])
+    except Exception as e:
+        print(f"Error querying Prolog triaje: {e}")
+    return 'amarillo'
+
+def get_diagnosis_specialist(diagnosis):
+    """Obtiene el especialista médico recomendado desde Prolog"""
+    try:
+        for result in prolog.query(f"obtener_especialista({diagnosis}, Doc)"):
+            doc = result['Doc']
+            if isinstance(doc, bytes):
+                return doc.decode('utf-8')
+            return str(doc)
+    except Exception as e:
+        print(f"Error querying Prolog specialist: {e}")
+    return 'Médico General'
 
 def calculate_confidence(symptoms, diagnosis):
     """Calculate confidence level based on symptom matching"""
     confidence_map = {
+        'dengue': 0.90,
+        'apendicitis': 0.95,
         'gripe': 0.95,
         'resfriado_comun': 0.85,
         'faringitis': 0.80,
@@ -172,3 +207,4 @@ if __name__ == '__main__':
     print("Intermediary module between Scala and Prolog")
     print("Listening on http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=False)
+
