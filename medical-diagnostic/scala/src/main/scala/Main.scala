@@ -263,358 +263,803 @@ object MedicalDiagnosticServer {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asistente de Diagnóstico Médico</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --paper: #EDF1EE;
+            --paper-raised: #FFFFFF;
+            --ink: #16241F;
+            --ink-soft: #52645C;
+            --ink-faint: #8B978F;
+            --line: #C9D3CD;
+            --accent: #1F5C52;
+            --accent-dark: #123B34;
+            --accent-soft: #DCEAE6;
+            --triage-verde: #2E8B57;
+            --triage-verde-bg: #E3F3E9;
+            --triage-amarillo: #B8720F;
+            --triage-amarillo-bg: #FBEBD3;
+            --triage-rojo: #C23B33;
+            --triage-rojo-bg: #FAE3E0;
+            --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+            --sans: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--sans);
+            background:
+                repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(31,92,82,0.05) 40px),
+                var(--paper);
+            color: var(--ink);
             min-height: 100vh;
-            padding: 20px;
+            padding: 32px 20px 60px;
         }
-        
+
         .container {
-            max-width: 1000px;
+            max-width: 1020px;
             margin: 0 auto;
         }
-        
-        header {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            text-align: center;
+
+        /* ---------- Welcome / intake screen ---------- */
+        .welcome-screen {
+            min-height: calc(100vh - 92px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-        header h1 {
-            color: #667eea;
-            margin-bottom: 10px;
+
+        .intake-card {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            padding: 40px 36px;
+            max-width: 380px;
+            width: 100%;
+            position: relative;
         }
-        
-        header p {
-            color: #666;
+
+        .intake-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .intake-card h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin: 12px 0 8px;
+            color: var(--ink);
+        }
+
+        .intake-sub {
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.55;
+            margin-bottom: 22px;
+        }
+
+        .intake-input {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1.5px solid var(--line);
+            border-radius: 3px;
+            font-family: var(--sans);
             font-size: 14px;
+            color: var(--ink);
+            background: var(--paper);
         }
-        
+
+        .intake-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--paper-raised);
+        }
+
+        /* ---------- Header: chart header ---------- */
+        .chart-header {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            padding: 28px 32px 24px;
+            position: relative;
+        }
+
+        .eyebrow {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .btn-logout {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            flex: none;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--ink-soft);
+            padding: 7px 12px;
+            font-size: 10.5px;
+        }
+
+        .btn-logout:hover {
+            border-color: var(--triage-rojo);
+            color: var(--triage-rojo);
+            background: var(--triage-rojo-bg);
+        }
+
+        @media (max-width: 560px) {
+            .btn-logout {
+                position: static;
+                margin-top: 14px;
+                width: auto;
+                display: inline-block;
+            }
+        }
+
+        .chart-header h1 {
+            font-family: var(--sans);
+            font-weight: 600;
+            font-size: 30px;
+            letter-spacing: -0.01em;
+            margin: 8px 0 14px;
+            color: var(--ink);
+        }
+
+        .welcome-msg {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-top: 12px;
+        }
+
+        .welcome-msg b {
+            color: var(--accent-dark);
+            font-weight: 600;
+        }
+
+        .pipeline {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-family: var(--mono);
+            font-size: 12px;
+        }
+
+        .pipeline-node {
+            display: flex;
+            flex-direction: column;
+            padding: 5px 10px;
+            border: 1px solid var(--line);
+            background: var(--paper);
+            line-height: 1.3;
+        }
+
+        .pipeline-node b {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .pipeline-node small {
+            color: var(--ink-faint);
+            font-size: 10px;
+            letter-spacing: 0.04em;
+        }
+
+        .pipeline-arrow {
+            color: var(--ink-faint);
+        }
+
+        /* ---------- ECG signature divider ---------- */
+        .pulse-divider {
+            width: 100%;
+            height: 34px;
+            display: block;
+        }
+
+        .pulse-divider path {
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 1.5;
+        }
+
+        /* ---------- Status monitor row ---------- */
+        .monitor {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            border-top: none;
+            padding: 14px 32px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 28px;
+            margin-bottom: 28px;
+            font-family: var(--mono);
+            font-size: 12px;
+        }
+
+        .monitor-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink-soft);
+        }
+
+        .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--ink-faint);
+            flex-shrink: 0;
+        }
+
+        .dot.ok { background: var(--triage-verde); box-shadow: 0 0 0 3px var(--triage-verde-bg); }
+        .dot.bad { background: var(--triage-rojo); box-shadow: 0 0 0 3px var(--triage-rojo-bg); }
+
+        /* ---------- Panels ---------- */
         .content {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
-            margin-bottom: 30px;
+            margin-bottom: 28px;
         }
-        
+
         @media (max-width: 768px) {
-            .content {
-                grid-template-columns: 1fr;
-            }
+            .content { grid-template-columns: 1fr; }
+            .chart-header { padding: 22px 20px; }
+            .chart-header h1 { font-size: 24px; }
+            .intake-card { padding: 30px 24px; }
         }
-        
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+
+        .panel {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            padding: 24px 26px;
+            display: flex;
+            flex-direction: column;
         }
-        
-        .card h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
+
+        .panel-eyebrow {
+            font-family: var(--mono);
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
             display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
+            margin-bottom: 6px;
         }
-        
+
+        .panel h2 {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: var(--ink);
+        }
+
+        /* ---------- Symptom checklist, grouped by category ---------- */
+        #symptomContainer {
+            border: 1px solid var(--line);
+            max-height: 340px;
+            overflow-y: auto;
+        }
+
+        .symptom-group-label {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-dark);
+            background: var(--accent-soft);
+            padding: 6px 14px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .symptom-group + .symptom-group .symptom-group-label {
+            border-top: 1px solid var(--line);
+        }
+
         .symptom-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 10px;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 1px solid #eee;
-            padding: 15px;
-            border-radius: 5px;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
         }
-        
+
         .symptom-item {
             display: flex;
             align-items: center;
+            gap: 9px;
+            padding: 9px 12px;
+            border-bottom: 1px dashed var(--line);
+            cursor: pointer;
         }
-        
+
+        .symptom-item:hover {
+            background: var(--accent-soft);
+        }
+
         .symptom-item input[type="checkbox"] {
-            margin-right: 8px;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid var(--ink-faint);
+            flex-shrink: 0;
             cursor: pointer;
+            position: relative;
         }
-        
+
+        .symptom-item input[type="checkbox"]:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .symptom-item input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            left: 3.5px;
+            top: 0.5px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 1.5px 1.5px 0;
+            transform: rotate(45deg);
+        }
+
         .symptom-item label {
-            margin: 0;
+            font-family: var(--mono);
+            font-size: 12px;
+            letter-spacing: 0.01em;
+            color: var(--ink);
             cursor: pointer;
-            font-weight: normal;
         }
-        
+
+        /* ---------- Buttons ---------- */
         .button-group {
             display: flex;
             gap: 10px;
-            margin-top: 20px;
+            margin-top: 18px;
         }
-        
+
         button {
             flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
+            padding: 12px 18px;
+            border: 1.5px solid var(--accent);
+            border-radius: 3px;
             cursor: pointer;
-            font-size: 14px;
+            font-family: var(--mono);
+            font-size: 12px;
             font-weight: 600;
-            transition: all 0.3s ease;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            transition: background 0.15s ease, color 0.15s ease;
         }
-        
+
         .btn-diagnose {
-            background: #667eea;
+            background: var(--accent);
             color: white;
         }
-        
+
         .btn-diagnose:hover {
-            background: #5568d3;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(102, 126, 234, 0.4);
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
         }
-        
+
         .btn-clear {
-            background: #f0f0f0;
-            color: #333;
+            background: transparent;
+            color: var(--accent);
         }
-        
+
         .btn-clear:hover {
-            background: #e0e0e0;
+            background: var(--accent-soft);
         }
-        
+
+        button:focus-visible, .intake-input:focus-visible {
+            outline: 2px solid var(--accent-dark);
+            outline-offset: 2px;
+        }
+
+        /* ---------- Alert / error ---------- */
+        .error {
+            background: var(--triage-rojo-bg);
+            color: var(--triage-rojo);
+            border-left: 3px solid var(--triage-rojo);
+            padding: 10px 14px;
+            margin-top: 14px;
+            display: none;
+            font-family: var(--mono);
+            font-size: 12px;
+        }
+
+        /* ---------- Loading: scanning line ---------- */
         .loading {
             display: none;
+            padding: 30px 0;
             text-align: center;
-            padding: 20px;
         }
-        
-        .spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
+
+        .scan-bar {
+            position: relative;
+            width: 100%;
+            height: 2px;
+            background: var(--line);
+            overflow: hidden;
+            margin-bottom: 14px;
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .scan-bar::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -30%;
+            width: 30%;
+            height: 100%;
+            background: var(--accent);
+            animation: scan 1.1s ease-in-out infinite;
         }
-        
-        .results {
-            display: none;
-            margin-top: 20px;
+
+        @keyframes scan {
+            0% { left: -30%; }
+            100% { left: 100%; }
         }
-        
-        .diagnosis-card {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 5px;
-            margin-bottom: 12px;
-            border-left: 4px solid #667eea;
-        }
-        
-        .diagnosis-card h3 {
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-        
-        .diagnosis-description {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-        
-        .confidence {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
+
+        .loading p {
+            font-family: var(--mono);
             font-size: 12px;
-            font-weight: bold;
+            color: var(--ink-soft);
+            letter-spacing: 0.04em;
         }
-        
-        .error {
-            background: #fee;
-            color: #c33;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 15px;
-            display: none;
-            border-left: 4px solid #c33;
+
+        @media (prefers-reduced-motion: reduce) {
+            .scan-bar::after { animation: none; left: 0; width: 100%; opacity: 0.5; }
         }
-        
-        .status {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+
+        /* ---------- Results ---------- */
+        .results { display: none; margin-top: 4px; }
+
+        .results-label {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--ink-faint);
+            margin-bottom: 4px;
         }
-        
-        .status-item {
+
+        #selectedSymptoms {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+            margin-bottom: 16px;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed var(--line);
+        }
+
+        .record {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--ink-faint);
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .record.triage-verde { border-left-color: var(--triage-verde); }
+        .record.triage-amarillo { border-left-color: var(--triage-amarillo); }
+        .record.triage-rojo { border-left-color: var(--triage-rojo); background: #FFFCFB; }
+
+        .record-head {
             display: flex;
             justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 14px;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 10px;
         }
-        
-        .status-item:last-child {
-            border-bottom: none;
-        }
-        
-        .status-label {
+
+        .record-head h3 {
+            font-size: 16px;
             font-weight: 600;
-            color: #333;
+            color: var(--ink);
         }
-        
-        .status-value {
-            color: #666;
+
+        .confidence-readout {
+            text-align: right;
+            flex-shrink: 0;
         }
-        
-        .status-ok {
-            color: #28a745;
+
+        .confidence-readout .value {
+            font-family: var(--mono);
+            font-size: 20px;
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+            color: var(--ink);
         }
-        
+
+        .confidence-readout .caption {
+            font-family: var(--mono);
+            font-size: 9px;
+            letter-spacing: 0.1em;
+            color: var(--ink-faint);
+            text-transform: uppercase;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 3px;
+            background: var(--line);
+            margin-bottom: 12px;
+        }
+
+        .confidence-bar-fill {
+            height: 100%;
+            background: var(--accent);
+        }
+
+        .triage-stamp {
+            display: inline-block;
+            font-family: var(--mono);
+            font-weight: 700;
+            font-size: 10.5px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 3px 9px;
+            border: 1.5px solid currentColor;
+            border-radius: 2px;
+            transform: rotate(-2deg);
+            margin-bottom: 10px;
+        }
+
+        .triage-verde .triage-stamp { color: var(--triage-verde); }
+        .triage-amarillo .triage-stamp { color: var(--triage-amarillo); }
+        .triage-rojo .triage-stamp { color: var(--triage-rojo); }
+
+        .diagnosis-description {
+            color: var(--ink-soft);
+            font-size: 13.5px;
+            line-height: 1.55;
+            margin-bottom: 12px;
+        }
+
+        .specialist-tag {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--accent-dark);
+            background: var(--accent-soft);
+            padding: 5px 10px;
+            display: inline-block;
+        }
+
+        #noResults {
+            color: var(--ink-faint);
+            font-size: 13px;
+            font-style: italic;
+            padding: 10px 0;
+        }
+
         footer {
             text-align: center;
-            color: white;
-            font-size: 12px;
-            margin-top: 30px;
+            color: var(--ink-faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.03em;
+            margin-top: 32px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>🏥 Asistente de Diagnóstico Médico</h1>
-            <p>Sistema integrado: Scala (Orquestador) → Python (Intermediario) → Prolog (Base de Conocimientos)</p>
-        </header>
-        
-        <div class="status">
-            <div class="status-item">
-                <span class="status-label">Estado del Sistema:</span>
-                <span class="status-value" id="systemStatus">Verificando...</span>
-            </div>
-            <div class="status-item">
-                <span class="status-label">Módulo Scala:</span>
-                <span class="status-value status-ok">Activo</span>
-            </div>
-            <div class="status-item">
-                <span class="status-label">Servidor Frontend:</span>
-                <span class="status-value" id="pythonStatus">Verificando...</span>
-            </div>
+
+    <div id="welcomeScreen" class="welcome-screen">
+        <div class="intake-card">
+            <span class="eyebrow">Registro de paciente</span>
+            <h1>¿Cómo te llamas?</h1>
+            <p class="intake-sub">Usaremos tu nombre para personalizar esta sesión de evaluación de síntomas.</p>
+            <form id="nameForm" onsubmit="return handleNameSubmit(event)">
+                <input type="text" id="patientName" class="intake-input" placeholder="Escribe tu nombre" autocomplete="off">
+                <button type="submit" class="btn-diagnose" style="width:100%; margin-top:14px;">Continuar</button>
+            </form>
         </div>
-        
+    </div>
+
+    <div id="mainScreen" class="container" style="display:none;">
+        <header class="chart-header">
+            <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+            <span class="eyebrow">Sistema de apoyo al diagnóstico</span>
+            <h1>Asistente de Diagnóstico Médico</h1>
+            <div class="pipeline">
+                <span class="pipeline-node"><b>Scala</b><small>orquestador · :8080</small></span>
+                <span class="pipeline-arrow">→</span>
+                <span class="pipeline-node"><b>Python</b><small>intermediario · :5000</small></span>
+                <span class="pipeline-arrow">→</span>
+                <span class="pipeline-node"><b>Prolog</b><small>base de conocimiento</small></span>
+            </div>
+            <p class="welcome-msg">Bienvenido/a, <b id="patientNameDisplay"></b> — selecciona tus síntomas y obtén tu diagnóstico preliminar.</p>
+        </header>
+
+        <svg class="pulse-divider" viewBox="0 0 1020 34" preserveAspectRatio="none">
+            <path d="M0,17 L400,17 L418,17 L428,3 L440,31 L452,10 L462,17 L480,17 L1020,17" />
+        </svg>
+
+        <div class="monitor">
+            <div class="monitor-item"><span class="dot" id="pythonDot"></span><span id="pythonStatus">Verificando…</span></div>
+            <div class="monitor-item"><span class="dot ok"></span><span>Módulo Scala — activo</span></div>
+            <div class="monitor-item"><span id="systemStatus">Verificando estado del sistema…</span></div>
+        </div>
+
         <div class="content">
-            <div class="card">
-                <h2>Seleccione sus Síntomas</h2>
-                <div id="symptomContainer" class="symptom-list">
-                    <p>Cargando síntomas...</p>
+            <div class="panel">
+                <span class="panel-eyebrow">01 — Formulario</span>
+                <h2>Síntomas del paciente</h2>
+                <div id="symptomContainer">
+                    <p style="padding:14px; font-family:var(--mono); font-size:12px; color:var(--ink-faint);">Cargando síntomas…</p>
                 </div>
                 <div class="button-group">
-                    <button class="btn-diagnose" onclick="diagnose()">Obtener Diagnóstico</button>
+                    <button class="btn-diagnose" onclick="diagnose()">Obtener diagnóstico</button>
                     <button class="btn-clear" onclick="clearSymptoms()">Limpiar</button>
                 </div>
                 <div class="error" id="error"></div>
             </div>
-            
-            <div class="card">
-                <h2>Resultados del Diagnóstico</h2>
+
+            <div class="panel">
+                <span class="panel-eyebrow">02 — Lectura</span>
+                <h2>Resultado diagnóstico</h2>
                 <div id="loading" class="loading">
-                    <div class="spinner"></div>
-                    <p>Analizando síntomas...</p>
+                    <div class="scan-bar"></div>
+                    <p>Analizando síntomas…</p>
                 </div>
                 <div id="results" class="results">
-                    <p><strong>Síntomas ingresados:</strong></p>
-                    <p id="selectedSymptoms" style="color: #666; margin-bottom: 15px;"></p>
-                    <p><strong>Posibles diagnósticos:</strong></p>
-                    <div id="diagnosisList"></div>
+                    <p class="results-label">Síntomas ingresados</p>
+                    <p id="selectedSymptoms"></p>
+                    <p class="results-label">Posibles diagnósticos</p>
+                    <div id="diagnosisList" style="margin-top:10px;"></div>
                 </div>
-                <p id="noResults" style="color: #999; font-style: italic;">Selecciona síntomas y haz clic en "Obtener Diagnóstico"</p>
+                <p id="noResults">Selecciona síntomas y haz clic en "Obtener diagnóstico"</p>
             </div>
         </div>
-        
+
         <footer>
-            <p>Proyecto Académico - Asistente de Diagnóstico Médico | Scala · Python · Prolog</p>
+            <p>Proyecto académico · Asistente de Diagnóstico Médico · Scala · Python · Prolog</p>
         </footer>
     </div>
-    
+
     <script>
         const API_BASE = window.location.origin;
-        
-        // Cargar síntomas al iniciar
+        const STORAGE_KEY = 'diag_patient_name';
+
+        // Categorías clínicas: agrupan los síntomas devueltos por la API.
+        // Cualquier síntoma que no encaje en una categoría cae en "Otros".
+        const SYMPTOM_CATEGORIES = [
+            { label: 'Respiratorios', items: ['tos', 'congestion_nasal', 'dolor_garganta', 'estornudos'] },
+            { label: 'Digestivos', items: ['vomitos', 'diarrea', 'dolor_abdominal'] },
+            { label: 'Generales / Sistémicos', items: ['fiebre', 'fatiga', 'escalofrios', 'cuerpo_adolorido', 'dolor_articular'] },
+            { label: 'Piel', items: ['erupciones_piel'] },
+            { label: 'Neurológicos', items: ['dolor_cabeza'] }
+        ];
+
         document.addEventListener('DOMContentLoaded', function() {
+            const savedName = localStorage.getItem(STORAGE_KEY);
+            if (savedName) {
+                showMainScreen(savedName);
+            } else {
+                document.getElementById('patientName').focus();
+            }
+        });
+
+        function handleNameSubmit(event) {
+            event.preventDefault();
+            const input = document.getElementById('patientName');
+            const name = input.value.trim();
+            if (!name) {
+                input.focus();
+                return false;
+            }
+            localStorage.setItem(STORAGE_KEY, name);
+            showMainScreen(name);
+            return false;
+        }
+
+        function showMainScreen(name) {
+            document.getElementById('patientNameDisplay').textContent = name;
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('mainScreen').style.display = 'block';
             loadSymptoms();
             checkSystemStatus();
-        });
-        
+        }
+
+        function logout() {
+            localStorage.removeItem(STORAGE_KEY);
+            clearSymptoms();
+            clearError();
+            document.getElementById('mainScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            const input = document.getElementById('patientName');
+            input.value = '';
+            input.focus();
+        }
+
         async function checkSystemStatus() {
             try {
                 const response = await fetch(API_BASE + '/api/status');
                 if (response.ok) {
-                    document.getElementById('pythonStatus').textContent = '✓ Conectado';
-                    document.getElementById('pythonStatus').style.color = '#28a745';
-                    document.getElementById('systemStatus').textContent = 'Funcionando correctamente';
-                    document.getElementById('systemStatus').style.color = '#28a745';
+                    document.getElementById('pythonStatus').textContent = 'Servidor Python — conectado';
+                    document.getElementById('pythonDot').classList.add('ok');
+                    document.getElementById('systemStatus').textContent = 'Sistema funcionando correctamente';
                 }
             } catch (e) {
-                document.getElementById('pythonStatus').textContent = '✗ Error de conexión';
-                document.getElementById('pythonStatus').style.color = '#dc3545';
+                document.getElementById('pythonStatus').textContent = 'Servidor Python — error de conexión';
+                document.getElementById('pythonDot').classList.add('bad');
+                document.getElementById('systemStatus').textContent = 'No se pudo verificar el estado del sistema';
             }
         }
-        
+
+        function buildSymptomGroups(symptoms) {
+            const used = new Set();
+            const groups = SYMPTOM_CATEGORIES.map(cat => {
+                const present = cat.items.filter(s => symptoms.includes(s));
+                present.forEach(s => used.add(s));
+                return { label: cat.label, items: present };
+            }).filter(g => g.items.length > 0);
+
+            const rest = symptoms.filter(s => !used.has(s));
+            if (rest.length > 0) {
+                groups.push({ label: 'Otros', items: rest });
+            }
+            return groups;
+        }
+
         async function loadSymptoms() {
             try {
                 const response = await fetch(API_BASE + '/api/symptoms');
                 const data = await response.json();
                 const symptoms = data.sintomas_disponibles || [];
-                
+
                 const container = document.getElementById('symptomContainer');
                 container.innerHTML = '';
-                
-                symptoms.forEach(symptom => {
-                    const id = 'symptom_' + symptom;
-                    const div = document.createElement('div');
-                    div.className = 'symptom-item';
-                    div.innerHTML = `
-                        <input type="checkbox" id="${id}" value="${symptom}">
-                        <label for="${id}">${formatSymptomName(symptom)}</label>
-                    `;
-                    container.appendChild(div);
+
+                const groups = buildSymptomGroups(symptoms);
+
+                groups.forEach(group => {
+                    const section = document.createElement('div');
+                    section.className = 'symptom-group';
+
+                    const heading = document.createElement('div');
+                    heading.className = 'symptom-group-label';
+                    heading.textContent = group.label;
+                    section.appendChild(heading);
+
+                    const grid = document.createElement('div');
+                    grid.className = 'symptom-list';
+
+                    group.items.forEach(symptom => {
+                        const id = 'symptom_' + symptom;
+                        const div = document.createElement('div');
+                        div.className = 'symptom-item';
+                        div.innerHTML = `
+                            <input type="checkbox" id="${id}" value="${symptom}">
+                            <label for="${id}">${formatSymptomName(symptom)}</label>
+                        `;
+                        grid.appendChild(div);
+                    });
+
+                    section.appendChild(grid);
+                    container.appendChild(section);
                 });
             } catch (error) {
                 console.error('Error cargando síntomas:', error);
-                document.getElementById('symptomContainer').innerHTML = '<p style="color: red;">Error cargando síntomas</p>';
+                document.getElementById('symptomContainer').innerHTML = '<p style="padding:14px; font-family:var(--mono); font-size:12px; color:var(--triage-rojo);">Error cargando síntomas</p>';
             }
         }
-        
+
         function formatSymptomName(symptom) {
             return symptom
                 .replace(/_/g, ' ')
@@ -622,19 +1067,19 @@ object MedicalDiagnosticServer {
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1))
                 .join(' ');
         }
-        
+
         async function diagnose() {
             const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
             const symptoms = Array.from(checkboxes).map(cb => cb.value);
-            
+
             if (symptoms.length === 0) {
                 showError('Por favor selecciona al menos un síntoma');
                 return;
             }
-            
+
             showLoading(true);
             clearError();
-            
+
             try {
                 const response = await fetch(API_BASE + '/api/diagnose', {
                     method: 'POST',
@@ -643,11 +1088,11 @@ object MedicalDiagnosticServer {
                     },
                     body: JSON.stringify({ symptoms: symptoms })
                 });
-                
+
                 if (!response.ok) {
                     throw new Error('Error en la respuesta del servidor');
                 }
-                
+
                 const data = await response.json();
                 displayResults(data);
             } catch (error) {
@@ -657,89 +1102,74 @@ object MedicalDiagnosticServer {
                 showLoading(false);
             }
         }
-        
+
+        const TRIAGE_LABEL = {
+            rojo: 'Urgencia alta — acudir a emergencias',
+            amarillo: 'Precaución — agendar cita médica',
+            verde: 'Estable — manejo de síntomas en casa'
+        };
+
         function displayResults(data) {
             const diagnosisList = data.diagnosticos_posibles || [];
-            
+
             if (diagnosisList.length === 0) {
                 showError('No se encontraron diagnósticos para los síntomas ingresados');
                 return;
             }
-            
-            // Mostrar síntomas ingresados
+
             document.getElementById('selectedSymptoms').textContent = data.sintomas_ingresados
                 .map(s => formatSymptomName(s))
                 .join(', ');
-            
-            // Mostrar diagnósticos
-            const diagnosisHtml = diagnosisList.map(diagnosis => {
-                // Calcular el porcentaje y color
-                const porcentaje = Math.round(diagnosis.confianza * 100);
-                let colorClase = '#dc3545';
-                if (porcentaje >= 85) colorClase = '#28a745';
-                else if (porcentaje >= 50) colorClase = '#ffc107';
-                const textColor = porcentaje >= 50 && porcentaje < 85 ? '#333' : 'white';
-                
-                // Procesar el nivel de Triaje
-                const triaje = diagnosis.triaje || 'amarillo';
-                let triajeHtml = '';
-                let borderStyle = 'border-left: 4px solid #667eea;'; // Estilo por defecto
-                
-                if (triaje === 'rojo') {
-                    triajeHtml = `<div style="background-color: #fee2e2; color: #991b1b; padding: 8px; border-radius: 5px; margin-bottom: 12px; font-weight: bold; font-size: 13px; border-left: 4px solid #dc2626;">URGENCIA ALTA: Acudir a emergencias inmediatamente</div>`;
-                    borderStyle = 'border-left: 4px solid #dc2626; background-color: #fffafb;'; // Resaltar tarjeta
-                } else if (triaje === 'amarillo') {
-                    triajeHtml = `<div style="background-color: #fef3c7; color: #92400e; padding: 8px; border-radius: 5px; margin-bottom: 12px; font-weight: bold; font-size: 13px; border-left: 4px solid #d97706;">PRECAUCIÓN: Agendar cita médica para evaluación</div>`;
-                    borderStyle = 'border-left: 4px solid #d97706;';
-                } else {
-                    triajeHtml = `<div style="background-color: #dcfce7; color: #166534; padding: 8px; border-radius: 5px; margin-bottom: 12px; font-weight: bold; font-size: 13px; border-left: 4px solid #16a34a;">ESTABLE: Manejo de síntomas en casa</div>`;
-                    borderStyle = 'border-left: 4px solid #16a34a;';
-                }
 
-                // Extraer variables asegurando compatibilidad con/sin tilde
+            const diagnosisHtml = diagnosisList.map(diagnosis => {
+                const porcentaje = Math.round(diagnosis.confianza * 100);
+                const triaje = (diagnosis.triaje || 'amarillo').toLowerCase();
+                const stampLabel = triaje === 'rojo' ? 'Urgente' : (triaje === 'verde' ? 'Estable' : 'Precaución');
                 const textoDescripcion = diagnosis.descripción || diagnosis.descripcion || 'Información no disponible.';
                 const especialista = diagnosis.especialista || 'Médico General';
-                
+
                 return `
-                <div class="diagnosis-card" style="padding: 20px; border-radius: 8px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); ${borderStyle}">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">
-                        <h3 style="margin: 0; font-size: 18px; color: #2d3748;">${formatSymptomName(diagnosis.enfermedad)}</h3>
-                        <span class="confidence" style="background-color: ${colorClase}; color: ${textColor}; padding: 5px 12px; font-size: 13px;">Confianza: ${porcentaje}%</span>
+                <div class="record triage-${triaje}">
+                    <div class="record-head">
+                        <div>
+                            <span class="triage-stamp">${stampLabel}</span>
+                            <h3>${formatSymptomName(diagnosis.enfermedad)}</h3>
+                        </div>
+                        <div class="confidence-readout">
+                            <div class="value">${porcentaje}%</div>
+                            <div class="caption">Confianza</div>
+                        </div>
                     </div>
-                    
-                    ${triajeHtml}
-                    
-                    <p class="diagnosis-description" style="margin-bottom: 12px; color: #4a5568; font-size: 14px; line-height: 1.5;">${textoDescripcion}</p>
-                    
-                    <div style="background-color: #ebf8ff; color: #2b6cb0; padding: 8px 12px; border-radius: 5px; font-size: 13px; font-weight: 600; display: inline-block;">
-                        👨‍⚕️ Especialista recomendado: ${especialista}
-                    </div>
+                    <div class="confidence-bar"><div class="confidence-bar-fill" style="width:${porcentaje}%;"></div></div>
+                    <p style="font-family:var(--mono); font-size:11px; color:var(--ink-soft); margin-bottom:10px;">${TRIAGE_LABEL[triaje] || ''}</p>
+                    <p class="diagnosis-description">${textoDescripcion}</p>
+                    <span class="specialist-tag">Especialista → ${especialista}</span>
                 </div>
                 `;
             }).join('');
-            
+
             document.getElementById('diagnosisList').innerHTML = diagnosisHtml;
             document.getElementById('noResults').style.display = 'none';
             document.getElementById('results').style.display = 'block';
         }
-        
+
         function clearSymptoms() {
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             document.getElementById('results').style.display = 'none';
             document.getElementById('noResults').style.display = 'block';
             clearError();
         }
-        
+
         function showLoading(show) {
             document.getElementById('loading').style.display = show ? 'block' : 'none';
         }
-        
+
         function showError(message) {
             const errorDiv = document.getElementById('error');
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
         }
-        
+
         function clearError() {
             document.getElementById('error').style.display = 'none';
         }
