@@ -114,7 +114,7 @@ def get_diseases():
     }), 200
 
 def get_diagnoses_manual(symptoms):
-    """Get diagnoses manually (fallback)"""
+    """Get diagnoses manually (fallback if Prolog query fails)"""
     diagnoses = []
     symptom_str = str(symptoms)
     # Dengue
@@ -123,27 +123,45 @@ def get_diagnoses_manual(symptoms):
     # Apendicitis
     if all(s in symptom_str for s in ['dolor_abdominal', 'vomitos']):
         diagnoses.append('apendicitis')
-    # Flu
+    # Gripe
     if all(s in symptom_str for s in ['fiebre', 'tos', 'fatiga', 'cuerpo_adolorido']):
         diagnoses.append('gripe')
-    # Common cold
+    # Resfriado común
     if all(s in symptom_str for s in ['congestion_nasal', 'tos', 'estornudos']):
         diagnoses.append('resfriado_comun')
-    # Pharyngitis
+    # Faringitis
     if all(s in symptom_str for s in ['dolor_garganta', 'fiebre']):
         diagnoses.append('faringitis')
     # Gastroenteritis
     if all(s in symptom_str for s in ['vomitos', 'diarrea']):
         diagnoses.append('gastroenteritis')
-    # Chickenpox
+    # Varicela
     if all(s in symptom_str for s in ['erupciones_piel', 'fiebre']):
         diagnoses.append('varicela')
-    # Allergy
+    # Alergia
     if all(s in symptom_str for s in ['estornudos', 'congestion_nasal']):
         diagnoses.append('alergia')
-    # Migraine
+    # Migraña
     if all(s in symptom_str for s in ['dolor_cabeza', 'fatiga']):
         diagnoses.append('migrana')
+    # Sinusitis
+    if all(s in symptom_str for s in ['congestion_nasal', 'dolor_cabeza', 'dolor_garganta']):
+        diagnoses.append('sinusitis')
+    # Neumonía
+    if all(s in symptom_str for s in ['fiebre', 'tos', 'dificultad_respirar']):
+        diagnoses.append('neumonia')
+    # Bronquitis
+    if all(s in symptom_str for s in ['tos', 'dificultad_respirar']):
+        diagnoses.append('bronquitis')
+    # Amigdalitis
+    if all(s in symptom_str for s in ['dolor_garganta', 'fiebre', 'dificultad_tragar']):
+        diagnoses.append('amigdalitis')
+    # COVID-19
+    if all(s in symptom_str for s in ['fiebre', 'tos', 'perdida_olfato']):
+        diagnoses.append('covid19')
+    # Infección urinaria
+    if all(s in symptom_str for s in ['dolor_orinar', 'fiebre']):
+        diagnoses.append('infeccion_urinaria')
     
     return diagnoses
 
@@ -194,7 +212,13 @@ def calculate_confidence(symptoms, diagnosis):
         'gastroenteritis': 0.90,
         'varicela': 0.85,
         'alergia': 0.75,
-        'migrana': 0.70
+        'migrana': 0.70,
+        'sinusitis': 0.80,
+        'neumonia': 0.90,
+        'bronquitis': 0.80,
+        'amigdalitis': 0.85,
+        'covid19': 0.85,
+        'infeccion_urinaria': 0.85
     }
     return confidence_map.get(str(diagnosis).lower(), 0.60)
 
@@ -207,4 +231,3 @@ if __name__ == '__main__':
     print("Intermediary module between Scala and Prolog")
     print("Listening on http://localhost:5000")
     app.run(host='0.0.0.0', port=5000, debug=False)
-

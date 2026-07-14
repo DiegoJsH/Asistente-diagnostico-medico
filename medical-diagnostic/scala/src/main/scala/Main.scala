@@ -77,9 +77,6 @@ object MedicalDiagnosticServer {
   /**
    * Iniciar servidor web HTTP embebido
    */
-/**
-   * Iniciar servidor web HTTP embebido
-   */
   def startWebServer(): Unit = {
     val server = com.sun.net.httpserver.HttpServer.create(
       new java.net.InetSocketAddress(SCALA_PORT),
@@ -283,6 +280,7 @@ object MedicalDiagnosticServer {
             --triage-amarillo-bg: #FBEBD3;
             --triage-rojo: #C23B33;
             --triage-rojo-bg: #FAE3E0;
+            --shadow-soft: 0 1px 2px rgba(18, 34, 28, 0.04), 0 4px 14px rgba(18, 34, 28, 0.05);
             --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
             --sans: 'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
         }
@@ -319,6 +317,8 @@ object MedicalDiagnosticServer {
         .intake-card {
             background: var(--paper-raised);
             border: 1px solid var(--line);
+            border-radius: 6px;
+            box-shadow: var(--shadow-soft);
             padding: 40px 36px;
             max-width: 380px;
             width: 100%;
@@ -330,6 +330,7 @@ object MedicalDiagnosticServer {
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 3px;
+            border-radius: 6px 6px 0 0;
             background: var(--accent);
         }
 
@@ -351,11 +352,12 @@ object MedicalDiagnosticServer {
             width: 100%;
             padding: 11px 13px;
             border: 1.5px solid var(--line);
-            border-radius: 3px;
+            border-radius: 4px;
             font-family: var(--sans);
             font-size: 14px;
             color: var(--ink);
             background: var(--paper);
+            transition: border-color 0.15s ease, background 0.15s ease;
         }
 
         .intake-input:focus {
@@ -368,6 +370,8 @@ object MedicalDiagnosticServer {
         .chart-header {
             background: var(--paper-raised);
             border: 1px solid var(--line);
+            border-radius: 6px 6px 0 0;
+            box-shadow: var(--shadow-soft);
             padding: 28px 32px 24px;
             position: relative;
         }
@@ -388,6 +392,7 @@ object MedicalDiagnosticServer {
             flex: none;
             background: transparent;
             border: 1px solid var(--line);
+            border-radius: 4px;
             color: var(--ink-soft);
             padding: 7px 12px;
             font-size: 10.5px;
@@ -429,39 +434,6 @@ object MedicalDiagnosticServer {
             font-weight: 600;
         }
 
-        .pipeline {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 12px;
-        }
-
-        .pipeline-node {
-            display: flex;
-            flex-direction: column;
-            padding: 5px 10px;
-            border: 1px solid var(--line);
-            background: var(--paper);
-            line-height: 1.3;
-        }
-
-        .pipeline-node b {
-            color: var(--ink);
-            font-weight: 600;
-        }
-
-        .pipeline-node small {
-            color: var(--ink-faint);
-            font-size: 10px;
-            letter-spacing: 0.04em;
-        }
-
-        .pipeline-arrow {
-            color: var(--ink-faint);
-        }
-
         /* ---------- ECG signature divider ---------- */
         .pulse-divider {
             width: 100%;
@@ -480,6 +452,8 @@ object MedicalDiagnosticServer {
             background: var(--paper-raised);
             border: 1px solid var(--line);
             border-top: none;
+            border-radius: 0 0 6px 6px;
+            box-shadow: var(--shadow-soft);
             padding: 14px 32px;
             display: flex;
             flex-wrap: wrap;
@@ -525,6 +499,8 @@ object MedicalDiagnosticServer {
         .panel {
             background: var(--paper-raised);
             border: 1px solid var(--line);
+            border-radius: 6px;
+            box-shadow: var(--shadow-soft);
             padding: 24px 26px;
             display: flex;
             flex-direction: column;
@@ -551,6 +527,7 @@ object MedicalDiagnosticServer {
         /* ---------- Symptom checklist, grouped by category ---------- */
         #symptomContainer {
             border: 1px solid var(--line);
+            border-radius: 4px;
             max-height: 340px;
             overflow-y: auto;
         }
@@ -583,6 +560,7 @@ object MedicalDiagnosticServer {
             padding: 9px 12px;
             border-bottom: 1px dashed var(--line);
             cursor: pointer;
+            transition: background 0.12s ease;
         }
 
         .symptom-item:hover {
@@ -594,6 +572,7 @@ object MedicalDiagnosticServer {
             width: 14px;
             height: 14px;
             border: 1.5px solid var(--ink-faint);
+            border-radius: 3px;
             flex-shrink: 0;
             cursor: pointer;
             position: relative;
@@ -635,14 +614,14 @@ object MedicalDiagnosticServer {
             flex: 1;
             padding: 12px 18px;
             border: 1.5px solid var(--accent);
-            border-radius: 3px;
+            border-radius: 4px;
             cursor: pointer;
             font-family: var(--mono);
             font-size: 12px;
             font-weight: 600;
             letter-spacing: 0.06em;
             text-transform: uppercase;
-            transition: background 0.15s ease, color 0.15s ease;
+            transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
         }
 
         .btn-diagnose {
@@ -653,6 +632,7 @@ object MedicalDiagnosticServer {
         .btn-diagnose:hover {
             background: var(--accent-dark);
             border-color: var(--accent-dark);
+            transform: translateY(-1px);
         }
 
         .btn-clear {
@@ -674,6 +654,7 @@ object MedicalDiagnosticServer {
             background: var(--triage-rojo-bg);
             color: var(--triage-rojo);
             border-left: 3px solid var(--triage-rojo);
+            border-radius: 0 4px 4px 0;
             padding: 10px 14px;
             margin-top: 14px;
             display: none;
@@ -749,6 +730,8 @@ object MedicalDiagnosticServer {
             background: var(--paper-raised);
             border: 1px solid var(--line);
             border-left: 4px solid var(--ink-faint);
+            border-radius: 4px;
+            box-shadow: var(--shadow-soft);
             padding: 16px 18px;
             margin-bottom: 12px;
             position: relative;
@@ -798,7 +781,9 @@ object MedicalDiagnosticServer {
             width: 100%;
             height: 3px;
             background: var(--line);
+            border-radius: 2px;
             margin-bottom: 12px;
+            overflow: hidden;
         }
 
         .confidence-bar-fill {
@@ -836,6 +821,7 @@ object MedicalDiagnosticServer {
             font-size: 11.5px;
             color: var(--accent-dark);
             background: var(--accent-soft);
+            border-radius: 3px;
             padding: 5px 10px;
             display: inline-block;
         }
@@ -876,13 +862,6 @@ object MedicalDiagnosticServer {
             <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
             <span class="eyebrow">Sistema de apoyo al diagnóstico</span>
             <h1>Asistente de Diagnóstico Médico</h1>
-            <div class="pipeline">
-                <span class="pipeline-node"><b>Scala</b><small>orquestador · :8080</small></span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-node"><b>Python</b><small>intermediario · :5000</small></span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-node"><b>Prolog</b><small>base de conocimiento</small></span>
-            </div>
             <p class="welcome-msg">Bienvenido/a, <b id="patientNameDisplay"></b> — selecciona tus síntomas y obtén tu diagnóstico preliminar.</p>
         </header>
 
@@ -892,7 +871,7 @@ object MedicalDiagnosticServer {
 
         <div class="monitor">
             <div class="monitor-item"><span class="dot" id="pythonDot"></span><span id="pythonStatus">Verificando…</span></div>
-            <div class="monitor-item"><span class="dot ok"></span><span>Módulo Scala — activo</span></div>
+            <div class="monitor-item"><span class="dot ok"></span><span>Sesión activa</span></div>
             <div class="monitor-item"><span id="systemStatus">Verificando estado del sistema…</span></div>
         </div>
 
@@ -928,7 +907,7 @@ object MedicalDiagnosticServer {
         </div>
 
         <footer>
-            <p>Proyecto académico · Asistente de Diagnóstico Médico · Scala · Python · Prolog</p>
+            <p>Proyecto académico · Asistente de Diagnóstico Médico</p>
         </footer>
     </div>
 
@@ -939,11 +918,12 @@ object MedicalDiagnosticServer {
         // Categorías clínicas: agrupan los síntomas devueltos por la API.
         // Cualquier síntoma que no encaje en una categoría cae en "Otros".
         const SYMPTOM_CATEGORIES = [
-            { label: 'Respiratorios', items: ['tos', 'congestion_nasal', 'dolor_garganta', 'estornudos'] },
-            { label: 'Digestivos', items: ['vomitos', 'diarrea', 'dolor_abdominal'] },
-            { label: 'Generales / Sistémicos', items: ['fiebre', 'fatiga', 'escalofrios', 'cuerpo_adolorido', 'dolor_articular'] },
-            { label: 'Piel', items: ['erupciones_piel'] },
-            { label: 'Neurológicos', items: ['dolor_cabeza'] }
+            { label: 'Respiratorios', items: ['tos', 'congestion_nasal', 'dolor_garganta', 'estornudos', 'dificultad_respirar', 'dolor_pecho', 'dificultad_tragar', 'perdida_olfato'] },
+            { label: 'Digestivos', items: ['vomitos', 'diarrea', 'dolor_abdominal', 'perdida_apetito', 'acidez'] },
+            { label: 'Generales / Sistémicos', items: ['fiebre', 'fatiga', 'escalofrios', 'cuerpo_adolorido', 'dolor_articular', 'sudoracion_nocturna', 'mareo', 'perdida_peso'] },
+            { label: 'Piel', items: ['erupciones_piel', 'picazon', 'hinchazon'] },
+            { label: 'Neurológicos', items: ['dolor_cabeza', 'sensibilidad_luz'] },
+            { label: 'Urinarios', items: ['dolor_orinar', 'sangre_orina'] }
         ];
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -991,12 +971,12 @@ object MedicalDiagnosticServer {
             try {
                 const response = await fetch(API_BASE + '/api/status');
                 if (response.ok) {
-                    document.getElementById('pythonStatus').textContent = 'Servidor Python — conectado';
+                    document.getElementById('pythonStatus').textContent = 'Motor de diagnóstico — conectado';
                     document.getElementById('pythonDot').classList.add('ok');
                     document.getElementById('systemStatus').textContent = 'Sistema funcionando correctamente';
                 }
             } catch (e) {
-                document.getElementById('pythonStatus').textContent = 'Servidor Python — error de conexión';
+                document.getElementById('pythonStatus').textContent = 'Motor de diagnóstico — error de conexión';
                 document.getElementById('pythonDot').classList.add('bad');
                 document.getElementById('systemStatus').textContent = 'No se pudo verificar el estado del sistema';
             }
@@ -1143,7 +1123,8 @@ object MedicalDiagnosticServer {
                     <div class="confidence-bar"><div class="confidence-bar-fill" style="width:${porcentaje}%;"></div></div>
                     <p style="font-family:var(--mono); font-size:11px; color:var(--ink-soft); margin-bottom:10px;">${TRIAGE_LABEL[triaje] || ''}</p>
                     <p class="diagnosis-description">${textoDescripcion}</p>
-                    <span class="specialist-tag">Especialista → ${especialista}</span>
+                    <p class="results-label" style="margin-top:2px; margin-bottom:6px;">Recomendación de especialista</p>
+                    <span class="specialist-tag">${especialista}</span>
                 </div>
                 `;
             }).join('');
