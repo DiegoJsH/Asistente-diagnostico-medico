@@ -187,7 +187,7 @@ triaje(neumonia, rojo).
 % ============================
 % Especialistas medicos recomendados
 % ============================
-especialista(resfriado_comun, 'Mdico General').
+especialista(resfriado_comun, 'Médico General').
 especialista(gripe, 'Médico General').
 especialista(faringitis, 'Otorrinolaringólogo (especialista en oído, nariz y garganta)').
 especialista(gastroenteritis, 'Gastroenterólogo (especialista en sistema digestivo)').

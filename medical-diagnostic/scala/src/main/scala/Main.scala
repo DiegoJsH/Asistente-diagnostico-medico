@@ -629,10 +629,36 @@ object MedicalDiagnosticServer {
             background: var(--triage-rojo-bg);
         }
 
+        .btn-history {
+            position: absolute;
+            top: 58px;
+            right: 24px;
+            flex: none;
+            background: transparent;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            color: var(--ink-soft);
+            padding: 7px 12px;
+            font-size: 10.5px;
+        }
+
+        .btn-history:hover {
+            border-color: var(--accent);
+            color: var(--accent-dark);
+            background: var(--accent-soft);
+        }
+
         @media (max-width: 560px) {
             .btn-logout {
                 position: static;
                 margin-top: 14px;
+                width: auto;
+                display: inline-block;
+            }
+
+            .btn-history {
+                position: static;
+                margin-top: 8px;
                 width: auto;
                 display: inline-block;
             }
@@ -693,6 +719,220 @@ object MedicalDiagnosticServer {
             align-items: center;
             gap: 8px;
             color: var(--ink-soft);
+        }
+
+        .panel-results {
+            position: relative;
+        }
+
+        .panel-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-alert-toggle {
+            width: auto;
+            flex: none;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--ink-soft);
+            padding: 8px 10px;
+            font-size: 10px;
+        }
+
+        .btn-alert-toggle:hover {
+            border-color: var(--accent);
+            color: var(--accent-dark);
+            background: var(--accent-soft);
+        }
+
+        .alert-modal-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(22, 36, 31, 0.34);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            z-index: 12;
+            padding: 18px;
+        }
+
+        .alert-modal {
+            width: min(560px, 100%);
+            border: 1px solid var(--line);
+            border-left: 5px solid var(--ink-faint);
+            border-radius: 6px;
+            box-shadow: var(--shadow-soft);
+            background: var(--paper-raised);
+            padding: 16px;
+        }
+
+        .alert-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 10px;
+        }
+
+        .alert-modal h3 {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .alert-modal-close {
+            width: auto;
+            flex: none;
+            border: 1px solid var(--line);
+            background: transparent;
+            color: var(--ink-soft);
+            padding: 6px 8px;
+            font-size: 10px;
+        }
+
+        .alert-modal-close:hover {
+            border-color: var(--triage-rojo);
+            color: var(--triage-rojo);
+            background: var(--triage-rojo-bg);
+        }
+
+        .alert-modal p {
+            font-size: 12.5px;
+            color: var(--ink-soft);
+            line-height: 1.45;
+        }
+
+        .alert-modal ul {
+            margin-top: 8px;
+            margin-left: 18px;
+            color: var(--ink-soft);
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .alert-modal.alert-rojo {
+            border-left-color: var(--triage-rojo);
+            background: var(--triage-rojo-bg);
+        }
+
+        .alert-modal.alert-rojo h3 {
+            color: var(--triage-rojo);
+        }
+
+        .alert-modal.alert-amarillo {
+            border-left-color: var(--triage-amarillo);
+            background: var(--triage-amarillo-bg);
+        }
+
+        .alert-modal.alert-amarillo h3 {
+            color: var(--triage-amarillo);
+        }
+
+        .alert-modal.alert-verde {
+            border-left-color: var(--triage-verde);
+            background: var(--triage-verde-bg);
+        }
+
+        .alert-modal.alert-verde h3 {
+            color: var(--triage-verde);
+        }
+
+        .history-panel {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            box-shadow: var(--shadow-soft);
+            padding: 16px 18px;
+            margin-bottom: 20px;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .history-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .history-count {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-faint);
+        }
+
+        .history-list {
+            display: grid;
+            gap: 10px;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 10px 12px;
+            background: var(--paper);
+        }
+
+        .history-item-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .history-item-time {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        .history-item-summary {
+            font-size: 12px;
+            color: var(--ink);
+            line-height: 1.45;
+        }
+
+        .history-item-summary b {
+            color: var(--accent-dark);
+        }
+
+        .history-empty {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-faint);
+            font-style: italic;
+        }
+
+        .history-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+
+        .btn-history-clear {
+            background: transparent;
+            color: var(--ink-soft);
+            border: 1px solid var(--line);
+            padding: 8px 10px;
+            font-size: 10px;
+            width: auto;
+        }
+
+        .btn-history-clear:hover {
+            border-color: var(--triage-rojo);
+            color: var(--triage-rojo);
+            background: var(--triage-rojo-bg);
         }
 
         .dot {
@@ -1146,10 +1386,26 @@ object MedicalDiagnosticServer {
     <div id="mainScreen" class="container" style="display:none;">
         <header class="chart-header">
             <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+            <button class="btn-history" id="historyToggleBtn" onclick="toggleHistoryPanel()" aria-expanded="false">Ver historial</button>
             <span class="eyebrow">Sistema de apoyo al diagnóstico</span>
             <h1>Asistente de Diagnóstico Médico</h1>
             <p class="welcome-msg">Bienvenido/a, <b id="patientNameDisplay"></b> — selecciona tus síntomas y obtén tu diagnóstico preliminar.</p>
         </header>
+
+        <section id="historyPanel" class="history-panel" style="display:none;">
+            <div class="history-header">
+                <div>
+                    <p class="history-title">Historial de consultas</p>
+                    <p class="history-count" id="historyCount">0 registros</p>
+                </div>
+            </div>
+            <div class="history-list" id="historyList">
+                <p class="history-empty">Aún no tienes consultas registradas.</p>
+            </div>
+            <div class="history-actions">
+                <button class="btn-history-clear" onclick="clearHistory()">Limpiar historial</button>
+            </div>
+        </section>
 
         <svg class="pulse-divider" viewBox="0 0 1020 34" preserveAspectRatio="none">
             <path d="M0,17 L400,17 L418,17 L428,3 L440,31 L452,10 L462,17 L480,17 L1020,17" />
@@ -1175,9 +1431,22 @@ object MedicalDiagnosticServer {
                 <div class="error" id="error"></div>
             </div>
 
-            <div class="panel">
+            <div class="panel panel-results">
                 <span class="panel-eyebrow">02 — Lectura</span>
-                <h2>Resultado diagnóstico</h2>
+                <div class="panel-title-row">
+                    <h2>Resultado diagnóstico</h2>
+                    <button id="alertToggleBtn" class="btn-alert-toggle" onclick="openClinicalAlertModal()" style="display:none;">Ver alerta clínica</button>
+                </div>
+                <div id="clinicalAlertBackdrop" class="alert-modal-backdrop" style="display:none;" onclick="closeClinicalAlertModal(event)">
+                    <div id="clinicalAlertModal" class="alert-modal" role="dialog" aria-modal="true" aria-labelledby="clinicalAlertTitle" onclick="event.stopPropagation()">
+                        <div class="alert-modal-header">
+                            <h3 id="clinicalAlertTitle"></h3>
+                            <button class="alert-modal-close" onclick="closeClinicalAlertModal()">Cerrar</button>
+                        </div>
+                        <p id="clinicalAlertMessage"></p>
+                        <ul id="clinicalAlertHints"></ul>
+                    </div>
+                </div>
                 <div id="loading" class="loading">
                     <div class="scan-bar"></div>
                     <p>Analizando síntomas…</p>
@@ -1200,6 +1469,15 @@ object MedicalDiagnosticServer {
     <script>
         const API_BASE = window.location.origin;
         const STORAGE_KEY = 'diag_patient_name';
+        const HISTORY_STORAGE_PREFIX = 'diag_history_';
+        const MAX_HISTORY_ITEMS = 12;
+        let currentPatientName = '';
+        let currentClinicalAlert = null;
+        const RED_FLAG_COMBINATIONS = [
+            ['dolor_pecho', 'dificultad_respirar'],
+            ['fiebre', 'confusion'],
+            ['sangre_orina', 'fiebre']
+        ];
 
         // Categorías clínicas: agrupan los síntomas devueltos por la API.
         // Cualquier síntoma que no encaje en una categoría cae en "Otros".
@@ -1246,18 +1524,25 @@ object MedicalDiagnosticServer {
         }
 
         function showMainScreen(name) {
+            currentPatientName = name;
             document.getElementById('patientNameDisplay').textContent = name;
             document.getElementById('landingScreen').style.display = 'none';
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('mainScreen').style.display = 'block';
+            document.getElementById('historyPanel').style.display = 'none';
+            document.getElementById('historyToggleBtn').textContent = 'Ver historial';
+            document.getElementById('historyToggleBtn').setAttribute('aria-expanded', 'false');
+            renderHistory(loadHistoryForCurrentUser());
             loadSymptoms();
             checkSystemStatus();
         }
 
         function logout() {
+            currentPatientName = '';
             localStorage.removeItem(STORAGE_KEY);
             clearSymptoms();
             clearError();
+            hideClinicalAlert();
             document.getElementById('patientName').value = '';
             showLandingScreen();
         }
@@ -1369,7 +1654,10 @@ object MedicalDiagnosticServer {
                 }
 
                 const data = await response.json();
-                displayResults(data);
+                const hasResults = displayResults(data);
+                if (hasResults) {
+                    addHistoryEntry(data);
+                }
             } catch (error) {
                 console.error('Error:', error);
                 showError('Error al procesar el diagnóstico: ' + error.message);
@@ -1389,7 +1677,7 @@ object MedicalDiagnosticServer {
 
             if (diagnosisList.length === 0) {
                 showError('No se encontraron diagnósticos para los síntomas ingresados');
-                return;
+                return false;
             }
 
             document.getElementById('selectedSymptoms').textContent = data.sintomas_ingresados
@@ -1427,12 +1715,223 @@ object MedicalDiagnosticServer {
             document.getElementById('diagnosisList').innerHTML = diagnosisHtml;
             document.getElementById('noResults').style.display = 'none';
             document.getElementById('results').style.display = 'block';
+            updateClinicalAlert(data);
+            return true;
+        }
+
+        function updateClinicalAlert(data) {
+            const diagnoses = data.diagnosticos_posibles || [];
+            const triageLevels = diagnoses.map(d => (d.triaje || 'amarillo').toLowerCase());
+            const symptomSet = new Set((data.sintomas_ingresados || []).map(s => (s || '').toLowerCase()));
+
+            const hasRedTriage = triageLevels.includes('rojo');
+            const hasYellowTriage = triageLevels.includes('amarillo');
+            const hasRedFlagsBySymptoms = RED_FLAG_COMBINATIONS.some(combo => combo.every(sym => symptomSet.has(sym)));
+
+            if (hasRedTriage || hasRedFlagsBySymptoms) {
+                showClinicalAlert(
+                    'rojo',
+                    'Alerta de seguridad clínica',
+                    'Tu resultado sugiere riesgo alto. Se recomienda acudir a emergencias hoy mismo.',
+                    [
+                        'Si presentas falta de aire intensa o dolor en el pecho, busca atención inmediata.',
+                        'Evita automedicarte hasta recibir evaluación presencial.'
+                    ]
+                );
+                return;
+            }
+
+            if (hasYellowTriage) {
+                showClinicalAlert(
+                    'amarillo',
+                    'Precaución clínica',
+                    'Se recomienda agendar una valoración médica en las próximas 24-48 horas.',
+                    [
+                        'Si los síntomas empeoran, vuelve a consultar o acude a urgencias.',
+                        'Mantén control de fiebre, dolor y estado general.'
+                    ]
+                );
+                return;
+            }
+
+            showClinicalAlert(
+                'verde',
+                'Seguimiento en casa',
+                'No se identifican señales de alta urgencia en este resultado preliminar.',
+                [
+                    'Si aparecen síntomas nuevos de alarma, solicita atención médica.',
+                    'Este asistente no reemplaza una consulta profesional.'
+                ]
+            );
+        }
+
+        function showClinicalAlert(level, title, message, hints) {
+            const alertModal = document.getElementById('clinicalAlertModal');
+            const titleNode = document.getElementById('clinicalAlertTitle');
+            const messageNode = document.getElementById('clinicalAlertMessage');
+            const hintsNode = document.getElementById('clinicalAlertHints');
+            const toggleBtn = document.getElementById('alertToggleBtn');
+
+            currentClinicalAlert = { level, title, message, hints: hints || [] };
+
+            alertModal.classList.remove('alert-rojo', 'alert-amarillo', 'alert-verde');
+            alertModal.classList.add('alert-' + level);
+
+            titleNode.textContent = title;
+            messageNode.textContent = message;
+            hintsNode.innerHTML = (hints || []).map(item => '<li>' + escapeHtml(item) + '</li>').join('');
+
+            toggleBtn.style.display = 'inline-block';
+            openClinicalAlertModal();
+        }
+
+        function hideClinicalAlert() {
+            const alertBackdrop = document.getElementById('clinicalAlertBackdrop');
+            const toggleBtn = document.getElementById('alertToggleBtn');
+            currentClinicalAlert = null;
+            alertBackdrop.style.display = 'none';
+            toggleBtn.style.display = 'none';
+        }
+
+        function openClinicalAlertModal() {
+            if (!currentClinicalAlert) {
+                return;
+            }
+            const alertBackdrop = document.getElementById('clinicalAlertBackdrop');
+            alertBackdrop.style.display = 'flex';
+        }
+
+        function closeClinicalAlertModal(event) {
+            if (event && event.target !== event.currentTarget) {
+                return;
+            }
+            const alertBackdrop = document.getElementById('clinicalAlertBackdrop');
+            alertBackdrop.style.display = 'none';
+        }
+
+        function historyStorageKey(name) {
+            const normalized = (name || '').trim().toLowerCase().replace(/\s+/g, '_');
+            return HISTORY_STORAGE_PREFIX + normalized;
+        }
+
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(text || '').replace(/[&<>"']/g, m => map[m]);
+        }
+
+        function loadHistoryForCurrentUser() {
+            if (!currentPatientName) {
+                return [];
+            }
+            const raw = localStorage.getItem(historyStorageKey(currentPatientName));
+            if (!raw) {
+                return [];
+            }
+            try {
+                const parsed = JSON.parse(raw);
+                return Array.isArray(parsed) ? parsed : [];
+            } catch (_e) {
+                return [];
+            }
+        }
+
+        function saveHistoryForCurrentUser(entries) {
+            if (!currentPatientName) {
+                return;
+            }
+            localStorage.setItem(historyStorageKey(currentPatientName), JSON.stringify(entries));
+        }
+
+        function addHistoryEntry(data) {
+            const diagnosisList = data.diagnosticos_posibles || [];
+            const entry = {
+                fecha: new Date().toISOString(),
+                sintomas: data.sintomas_ingresados || [],
+                diagnosticos: diagnosisList.map(d => ({
+                    enfermedad: d.enfermedad || '',
+                    confianza: Number(d.confianza || 0),
+                    triaje: (d.triaje || 'amarillo').toLowerCase()
+                }))
+            };
+
+            const current = loadHistoryForCurrentUser();
+            const updated = [entry].concat(current).slice(0, MAX_HISTORY_ITEMS);
+            saveHistoryForCurrentUser(updated);
+            renderHistory(updated);
+        }
+
+        function formatHistoryDate(isoDate) {
+            try {
+                return new Date(isoDate).toLocaleString('es-ES');
+            } catch (_e) {
+                return isoDate;
+            }
+        }
+
+        function renderHistory(entries) {
+            const list = document.getElementById('historyList');
+            const count = document.getElementById('historyCount');
+
+            if (!entries || entries.length === 0) {
+                count.textContent = '0 registros';
+                list.innerHTML = '<p class="history-empty">Aún no tienes consultas registradas.</p>';
+                return;
+            }
+
+            count.textContent = entries.length + (entries.length === 1 ? ' registro' : ' registros');
+
+            list.innerHTML = entries.map(entry => {
+                const sintomas = (entry.sintomas || []).map(formatSymptomName).join(', ');
+                const diagnosticos = (entry.diagnosticos || []).map(d => {
+                    const porcentaje = Math.round((Number(d.confianza) || 0) * 100);
+                    return formatSymptomName(d.enfermedad || '') + ' (' + porcentaje + '%)';
+                }).join(', ');
+
+                return `
+                <div class="history-item">
+                    <div class="history-item-head">
+                        <span class="history-item-time">${escapeHtml(formatHistoryDate(entry.fecha || ''))}</span>
+                    </div>
+                    <p class="history-item-summary"><b>Síntomas:</b> ${escapeHtml(sintomas || 'Sin datos')}</p>
+                    <p class="history-item-summary"><b>Diagnósticos:</b> ${escapeHtml(diagnosticos || 'Sin resultados')}</p>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function toggleHistoryPanel() {
+            const panel = document.getElementById('historyPanel');
+            const btn = document.getElementById('historyToggleBtn');
+            const isOpen = panel.style.display !== 'none';
+
+            panel.style.display = isOpen ? 'none' : 'block';
+            btn.textContent = isOpen ? 'Ver historial' : 'Ocultar historial';
+            btn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+
+            if (!isOpen) {
+                renderHistory(loadHistoryForCurrentUser());
+            }
+        }
+
+        function clearHistory() {
+            if (!currentPatientName) {
+                return;
+            }
+            localStorage.removeItem(historyStorageKey(currentPatientName));
+            renderHistory([]);
         }
 
         function clearSymptoms() {
             document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
             document.getElementById('results').style.display = 'none';
             document.getElementById('noResults').style.display = 'block';
+            hideClinicalAlert();
             clearError();
         }
 

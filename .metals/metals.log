@@ -67,3 +67,36 @@ INFO: Unsupported notification method: $/setTrace
 2026.07.14 08:47:46 INFO  time: indexed workspace in 5.36s
 jul. 14, 2026 8:48:00 A. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
 WARNING: Unmatched cancel notification for request id 1
+jul. 14, 2026 9:14:15 A. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 11
+jul. 14, 2026 9:14:15 A. M. org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+WARNING: Unmatched cancel notification for request id 14
+2026.07.14 09:50:40 INFO  Shutting down server
+2026.07.14 09:50:40 INFO  Memory monitor stopped
+2026.07.14 09:50:40 INFO  shutting down Metals
+2026.07.14 09:50:40 INFO  Shut down connection with build server.
+2026.07.14 09:50:40 INFO  Exiting server
+2026.07.18 19:43:54 INFO  Started: Metals version 1.6.7 in folders 'C:\Users\USER\Desktop\Asistente-diagnostico-medico' for client Visual Studio Code 1.128.1.
+2026.07.18 19:43:54 INFO  Memory monitor started
+2026.07.18 19:43:58 WARN  Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.
+2026.07.18 19:43:59 INFO  Attempting to connect to the build server...
+2026.07.18 19:43:59 INFO  Running BSP server List(C:\Users\USER\AppData\Local\Coursier\data\bin\.scala-cli.aux.exe, bsp, --json-options, C:\Users\USER\Desktop\Asistente-diagnostico-medico\.scala-build\ide-options-v2.json, --json-launcher-options, C:\Users\USER\Desktop\Asistente-diagnostico-medico\.scala-build\ide-launcher-options.json, --envs-file, C:\Users\USER\Desktop\Asistente-diagnostico-medico\.scala-build\ide-envs.json, C:\Users\USER\Desktop\Asistente-diagnostico-medico)
+2026.07.18 19:44:00 INFO  tracing is disabled for protocol BSP, to enable tracing of incoming and outgoing JSON messages create an empty file at C:\Users\USER\Desktop\Asistente-diagnostico-medico\.metals\bsp.trace.json or C:\Users\USER\AppData\Local\scalameta\metals\cache\bsp.trace.json
+2026.07.18 19:44:08 INFO  BSP server: Starting compilation server
+2026.07.18 19:44:15 INFO  time: Connected to build server in 16s
+2026.07.18 19:44:15 INFO  Connected to Build server: scala-cli v1.14.0
+2026.07.18 19:44:16 INFO  time: Imported build in 0.71s
+2026.07.18 19:44:20 INFO  compiling asistente-diagnostico-medico_874c71184e (1 scala source)
+2026.07.18 19:44:28 WARN  Using H2 2.4.240 which is newer than the version Flyway has been verified with. The latest verified version of H2 is 2.3.232.
+2026.07.18 19:44:28 INFO  time: indexed workspace in 12s
+2026.07.18 19:44:31 WARN  there were 3 deprecation warnings; re-run with -deprecation for details
+2026.07.18 19:44:31 INFO  time: compiled Asistente-diagnostico-medico_874c71184e in 11s
+2026.07.18 19:47:51 INFO  compiling asistente-diagnostico-medico_874c71184e (1 scala source)
+2026.07.18 19:47:54 WARN  there were 3 deprecation warnings; re-run with -deprecation for details
+2026.07.18 19:47:54 INFO  time: compiled Asistente-diagnostico-medico_874c71184e in 2.67s
+2026.07.18 20:03:55 INFO  compiling asistente-diagnostico-medico_874c71184e (1 scala source)
+2026.07.18 20:03:56 WARN  there were 3 deprecation warnings; re-run with -deprecation for details
+2026.07.18 20:03:56 INFO  time: compiled Asistente-diagnostico-medico_874c71184e in 1.73s
+2026.07.18 20:09:04 INFO  compiling asistente-diagnostico-medico_874c71184e (1 scala source)
+2026.07.18 20:09:05 WARN  there were 3 deprecation warnings; re-run with -deprecation for details
+2026.07.18 20:09:05 INFO  time: compiled Asistente-diagnostico-medico_874c71184e in 1.35s
