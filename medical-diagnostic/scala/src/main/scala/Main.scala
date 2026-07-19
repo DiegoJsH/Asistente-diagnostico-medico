@@ -29,7 +29,7 @@ case class DiagnosisResult(
 // Servidor web embebido
 object MedicalDiagnosticServer {
   
-  private val PYTHON_API_URL = "https://tu-api-python.onrender.com"
+  private val PYTHON_API_URL = "https://asistente-medico-api.onrender.com"
   private val SCALA_PORT = 8080
   
   def main(args: Array[String]): Unit = {
