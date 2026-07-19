@@ -1,9 +1,12 @@
-FROM sbtscala/sbt:17-alpine
+FROM eclipse-temurin:17-alpine
+
+# Instalar bash y sbt usando el gestor de paquetes de Alpine
+RUN apk add --no-cache bash sbt
 
 WORKDIR /app
 COPY . /app
 
-# Pre-compilamos el proyecto aquí para ahorrar memoria RAM en el servidor
+# Pre-compilar el proyecto para dejarlo listo
 RUN sbt compile
 
 EXPOSE 8080
