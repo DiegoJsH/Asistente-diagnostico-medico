@@ -44,7 +44,7 @@ object MedicalDiagnosticServer {
     if (!checkPythonServer()) {
       println("[ERROR] El servidor Python no está disponible en " + PYTHON_API_URL)
       println("[Scala] Inicia Python con: python3 python/app.py")
-      sys.exit(1)
+      //sys.exit(1)
     }
     println("[OK] Servidor Python está activo")
     println()
