@@ -15,7 +15,7 @@ app.config['JSON_AS_ASCII'] = False
 prolog = Prolog()
 
 # Load knowledge base
-knowledge_base_path = os.path.join(os.path.dirname(__file__), '../prolog/knowledge_base.pl')
+knowledge_base_path = os.path.join(os.path.dirname(__file__), 'knowledge_base.pl')
 prolog.consult(knowledge_base_path)
 
 @app.route('/health', methods=['GET'])
