@@ -7,8 +7,8 @@ RUN apk add --no-cache curl bash
 RUN curl -sL "https://github.com/sbt/sbt/releases/download/v1.9.9/sbt-1.9.9.tgz" | tar -xz -C /usr/local
 ENV PATH="/usr/local/sbt/bin:$PATH"
 
-# 3. Restringir la memoria máxima de SBT a 256MB y optimizar el recolector de basura
-ENV SBT_OPTS="-Xms128M -Xmx256M -Xss2M -XX:+UseSerialGC"
+# 3. Limitar la RAM del proceso base de SBT a solo 180MB
+ENV SBT_OPTS="-Xms64M -Xmx180M -Xss2M -XX:+UseSerialGC"
 
 WORKDIR /app
 COPY . /app
@@ -18,5 +18,5 @@ RUN sbt compile
 
 EXPOSE 8080
 
-# 5. Ejecutar desactivando el 'fork' para que NO duplique el proceso en la RAM
-CMD ["sbt", "set fork in run := false", "run"]
+# 5. Inyectar límites de RAM directamente al proceso hijo que levanta tu servidor HTTP
+CMD ["sbt", "-Dsbt.java.options=-Xms64M -Xmx180M -XX:+UseSerialGC", "run"]
