@@ -306,6 +306,217 @@ object MedicalDiagnosticServer {
             margin: 0 auto;
         }
 
+        /* ---------- Landing page ---------- */
+        .landing-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 4px 28px;
+        }
+
+        .brand {
+            font-family: var(--sans);
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--accent-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-icon {
+            font-size: 22px;
+            line-height: 1;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            font-family: var(--sans);
+            font-size: 13px;
+            color: var(--ink-soft);
+        }
+
+        .btn-inline {
+            flex: none;
+            width: auto;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--accent-dark) 0%, var(--accent) 55%, var(--triage-verde) 100%);
+            border-radius: 6px;
+            padding: 64px 44px;
+            text-align: center;
+            margin-bottom: 44px;
+            color: #FFFFFF;
+        }
+
+        .hero .eyebrow {
+            display: block;
+            color: rgba(255,255,255,0.85);
+        }
+
+        .hero h1 {
+            color: #FFFFFF;
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            line-height: 1.3;
+            margin: 14px auto 16px;
+            max-width: 640px;
+        }
+
+        .hero-sub {
+            max-width: 540px;
+            margin: 0 auto 30px;
+            color: rgba(255,255,255,0.9);
+            font-size: 15px;
+            line-height: 1.65;
+        }
+
+        .btn-hero-cta {
+            background: #FFFFFF;
+            color: var(--accent-dark);
+            border-color: #FFFFFF;
+        }
+
+        .btn-hero-cta:hover {
+            background: var(--paper);
+            border-color: var(--paper);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 32px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 48px;
+        }
+
+        .feature-card {
+            background: var(--paper-raised);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            box-shadow: var(--shadow-soft);
+            padding: 28px 20px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 30px;
+            margin-bottom: 14px;
+        }
+
+        .feature-card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--accent-dark);
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.55;
+        }
+
+        .checklist-section {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .checklist {
+            max-width: 520px;
+            margin: 0 auto;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14.5px;
+            color: var(--ink);
+        }
+
+        .checklist-item .check {
+            color: var(--triage-verde);
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .cta-banner {
+            background: linear-gradient(120deg, var(--triage-verde), var(--accent));
+            border-radius: 6px;
+            padding: 48px 30px;
+            text-align: center;
+            color: #FFFFFF;
+            margin-bottom: 20px;
+        }
+
+        .cta-banner h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .cta-banner p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 24px;
+        }
+
+        .btn-cta-white {
+            background: #FFFFFF;
+            color: var(--accent-dark);
+            border-color: #FFFFFF;
+        }
+
+        .btn-cta-white:hover {
+            background: var(--paper);
+            border-color: var(--paper);
+        }
+
+        .landing-footer {
+            background: var(--ink);
+            color: rgba(255,255,255,0.75);
+            text-align: center;
+            padding: 26px 20px;
+            border-radius: 6px;
+            font-family: var(--sans);
+            font-size: 12.5px;
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        .landing-footer .disclaimer-text {
+            display: block;
+            font-style: italic;
+            color: rgba(255,255,255,0.55);
+            margin-top: 4px;
+        }
+
+        @media (max-width: 900px) {
+            .feature-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 560px) {
+            .feature-grid { grid-template-columns: 1fr; }
+            .hero { padding: 40px 24px; }
+            .hero h1 { font-size: 24px; }
+        }
+
         /* ---------- Welcome / intake screen ---------- */
         .welcome-screen {
             min-height: calc(100vh - 92px);
@@ -364,6 +575,20 @@ object MedicalDiagnosticServer {
             outline: none;
             border-color: var(--accent);
             background: var(--paper-raised);
+        }
+
+        .intake-back {
+            display: inline-block;
+            margin-top: 16px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-faint);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .intake-back:hover {
+            color: var(--accent);
         }
 
         /* ---------- Header: chart header ---------- */
@@ -845,7 +1070,67 @@ object MedicalDiagnosticServer {
 </head>
 <body>
 
-    <div id="welcomeScreen" class="welcome-screen">
+    <div id="landingScreen" class="container">
+        <nav class="landing-nav">
+            <span class="brand"><span class="brand-icon"></span>Asistente de Diagnóstico Médico</span>
+            <button class="btn-diagnose btn-inline" onclick="showWelcomeScreen()">Iniciar sesión</button>
+        </nav>
+
+        <section class="hero">
+            <span class="eyebrow">Tu asistente médico inteligente</span>
+            <h1>Análisis de síntomas guiado por un motor de reglas clínicas</h1>
+            <p class="hero-sub">Selecciona lo que sientes y recibe una orientación preliminar sobre posibles diagnósticos, su nivel de urgencia y el especialista recomendado.</p>
+            <button class="btn-diagnose btn-inline btn-hero-cta" style="padding:14px 32px; font-size:13px;" onclick="showWelcomeScreen()">Ir al Asistente Médico</button>
+        </section>
+
+        <h2 class="section-title">¿Cómo Funciona?</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🩺</div>
+                <h3>Análisis de Síntomas</h3>
+                <p>Selecciona tus síntomas de forma sencilla, organizados por categoría clínica.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Base de Conocimiento</h3>
+                <p>Un motor de reglas clínicas evalúa tus síntomas contra enfermedades comunes.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Diagnósticos con Confianza</h3>
+                <p>Recibe posibles diagnósticos con un nivel de confianza para cada uno.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏥</div>
+                <h3>Recomendaciones</h3>
+                <p>Obtén el nivel de urgencia y el especialista recomendado para tu caso.</p>
+            </div>
+        </div>
+
+        <div class="checklist-section">
+            <h2 class="section-title">Características Principales</h2>
+            <div class="checklist">
+                <div class="checklist-item"><span class="check">✓</span> Análisis rápido de síntomas por categoría</div>
+                <div class="checklist-item"><span class="check">✓</span> Interfaz sencilla y fácil de usar</div>
+                <div class="checklist-item"><span class="check">✓</span> Información detallada de cada posible diagnóstico</div>
+                <div class="checklist-item"><span class="check">✓</span> Recomendación de especialista y nivel de triaje</div>
+                <div class="checklist-item"><span class="check">✓</span> Tus síntomas se procesan únicamente en este sistema, sin enviarse a servidores externos</div>
+                <div class="checklist-item"><span class="check">✓</span> Disponible las veces que lo necesites</div>
+            </div>
+        </div>
+
+        <div class="cta-banner">
+            <h2>¿Listo para comenzar?</h2>
+            <p>Accede ahora a tu asistente médico y obtén un diagnóstico preliminar basado en tus síntomas.</p>
+            <button class="btn-diagnose btn-inline btn-cta-white" onclick="showWelcomeScreen()">Acceder al Asistente</button>
+        </div>
+
+        <div class="landing-footer">
+            <p>© 2026 Asistente de Diagnóstico Médico. Proyecto académico. Todos los derechos reservados.</p>
+        </div>
+    </div>
+
+    <div id="welcomeScreen" class="welcome-screen" style="display:none;">
         <div class="intake-card">
             <span class="eyebrow">Registro de paciente</span>
             <h1>¿Cómo te llamas?</h1>
@@ -854,6 +1139,7 @@ object MedicalDiagnosticServer {
                 <input type="text" id="patientName" class="intake-input" placeholder="Escribe tu nombre" autocomplete="off">
                 <button type="submit" class="btn-diagnose" style="width:100%; margin-top:14px;">Continuar</button>
             </form>
+            <a class="intake-back" onclick="showLandingScreen()">&larr; Volver al inicio</a>
         </div>
     </div>
 
@@ -930,10 +1216,21 @@ object MedicalDiagnosticServer {
             const savedName = localStorage.getItem(STORAGE_KEY);
             if (savedName) {
                 showMainScreen(savedName);
-            } else {
-                document.getElementById('patientName').focus();
             }
+            // Si no hay nombre guardado, se queda en la landing page (pantalla por defecto).
         });
+
+        function showWelcomeScreen() {
+            document.getElementById('landingScreen').style.display = 'none';
+            document.getElementById('welcomeScreen').style.display = 'flex';
+            document.getElementById('patientName').focus();
+        }
+
+        function showLandingScreen() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('mainScreen').style.display = 'none';
+            document.getElementById('landingScreen').style.display = 'block';
+        }
 
         function handleNameSubmit(event) {
             event.preventDefault();
@@ -950,6 +1247,7 @@ object MedicalDiagnosticServer {
 
         function showMainScreen(name) {
             document.getElementById('patientNameDisplay').textContent = name;
+            document.getElementById('landingScreen').style.display = 'none';
             document.getElementById('welcomeScreen').style.display = 'none';
             document.getElementById('mainScreen').style.display = 'block';
             loadSymptoms();
@@ -960,11 +1258,8 @@ object MedicalDiagnosticServer {
             localStorage.removeItem(STORAGE_KEY);
             clearSymptoms();
             clearError();
-            document.getElementById('mainScreen').style.display = 'none';
-            document.getElementById('welcomeScreen').style.display = 'flex';
-            const input = document.getElementById('patientName');
-            input.value = '';
-            input.focus();
+            document.getElementById('patientName').value = '';
+            showLandingScreen();
         }
 
         async function checkSystemStatus() {
