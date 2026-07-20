@@ -230,4 +230,4 @@ if __name__ == '__main__':
     print("Starting Python server...")
     print("Intermediary module between Scala and Prolog")
     print("Listening on http://localhost:5000")
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=False, threaded=False)
