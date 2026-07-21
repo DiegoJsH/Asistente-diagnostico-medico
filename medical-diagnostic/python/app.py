@@ -6,17 +6,21 @@ Exposes a REST API that queries the Prolog knowledge base
 
 from flask import Flask, request, jsonify
 from pyswip import Prolog
-import json
 import os
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
+
 # Initialize Prolog
 prolog = Prolog()
 
-# Load knowledge base
+# Load knowledge base ONCE at startup
 knowledge_base_path = os.path.join(os.path.dirname(__file__), 'knowledge_base.pl')
-prolog.consult(knowledge_base_path)
+try:
+    prolog.consult(knowledge_base_path)
+    print("[Python] Base de conocimientos Prolog cargada exitosamente.")
+except Exception as e:
+    print(f"[ERROR] No se pudo cargar la base de conocimientos: {e}")
 
 @app.route('/health', methods=['GET'])
 def health():
@@ -34,7 +38,7 @@ def diagnose():
     Expects JSON: {"symptoms": ["fiebre", "tos", "fatiga", "cuerpo_adolorido"]}
     """
     try:
-        data = request.get_json()
+        data = request.get_json() or {}
         symptoms = data.get('symptoms', [])
         
         if not symptoms:
@@ -44,14 +48,15 @@ def diagnose():
             }), 400
         
         # Convert strings to Prolog atoms
-        prolog_symptoms = [atom(symptom.lower().replace(' ', '_')) for symptom in symptoms]
+        prolog_symptoms = [atom(symptom) for symptom in symptoms]
         
-        # Query possible diagnoses
+        # Query possible diagnoses using list() to close the C-query immediately
         diagnoses = []
         try:
-            for result in prolog.query(f'obtener_diagnosticos({prolog_symptoms}, Diagnosticos)'):
-                diagnoses = list(result['Diagnosticos'])
-                break
+            query_str = f'obtener_diagnosticos({prolog_symptoms}, Diagnosticos)'
+            results = list(prolog.query(query_str))
+            if results and 'Diagnosticos' in results[0]:
+                diagnoses = [str(d) for d in results[0]['Diagnosticos']]
         except Exception as e:
             print(f"Error querying Prolog: {e}")
             # If error, try manual diagnosis
@@ -88,14 +93,19 @@ def get_symptoms():
     """Return list of available symptoms"""
     symptoms = []
     try:
-        for result in prolog.query('sintoma(X)'):
+        # IMPORTANTE: Usamos list() para evaluar la consulta y CERRAR el puntero en C
+        results = list(prolog.query('sintoma(X)'))
+        for result in results:
             symptoms.append(str(result['X']))
     except Exception as e:
         print(f"Error getting symptoms: {e}")
     
+    sorted_symptoms = sorted(symptoms)
+    # Enviamos tanto 'symptoms' como 'sintomas_disponibles' para evitar descalces en Scala/JS
     return jsonify({
-        'sintomas_disponibles': sorted(symptoms),
-        'total': len(symptoms)
+        'symptoms': sorted_symptoms,
+        'sintomas_disponibles': sorted_symptoms,
+        'total': len(sorted_symptoms)
     }), 200
 
 @app.route('/diseases', methods=['GET'])
@@ -103,63 +113,52 @@ def get_diseases():
     """Return list of known diseases"""
     diseases = []
     try:
-        for result in prolog.query('enfermedad(X)'):
+        results = list(prolog.query('enfermedad(X)'))
+        for result in results:
             diseases.append(str(result['X']))
     except Exception as e:
         print(f"Error getting diseases: {e}")
     
+    sorted_diseases = sorted(diseases)
     return jsonify({
-        'enfermedades_conocidas': sorted(diseases),
-        'total': len(diseases)
+        'diseases': sorted_diseases,
+        'enfermedades_conocidas': sorted_diseases,
+        'total': len(sorted_diseases)
     }), 200
 
 def get_diagnoses_manual(symptoms):
     """Get diagnoses manually (fallback if Prolog query fails)"""
     diagnoses = []
     symptom_str = str(symptoms)
-    # Dengue
+    
     if all(s in symptom_str for s in ['fiebre', 'dolor_articular', 'fatiga']):
         diagnoses.append('dengue')
-    # Apendicitis
     if all(s in symptom_str for s in ['dolor_abdominal', 'vomitos']):
         diagnoses.append('apendicitis')
-    # Gripe
     if all(s in symptom_str for s in ['fiebre', 'tos', 'fatiga', 'cuerpo_adolorido']):
         diagnoses.append('gripe')
-    # Resfriado común
     if all(s in symptom_str for s in ['congestion_nasal', 'tos', 'estornudos']):
         diagnoses.append('resfriado_comun')
-    # Faringitis
     if all(s in symptom_str for s in ['dolor_garganta', 'fiebre']):
         diagnoses.append('faringitis')
-    # Gastroenteritis
     if all(s in symptom_str for s in ['vomitos', 'diarrea']):
         diagnoses.append('gastroenteritis')
-    # Varicela
     if all(s in symptom_str for s in ['erupciones_piel', 'fiebre']):
         diagnoses.append('varicela')
-    # Alergia
     if all(s in symptom_str for s in ['estornudos', 'congestion_nasal']):
         diagnoses.append('alergia')
-    # Migraña
     if all(s in symptom_str for s in ['dolor_cabeza', 'fatiga']):
         diagnoses.append('migrana')
-    # Sinusitis
     if all(s in symptom_str for s in ['congestion_nasal', 'dolor_cabeza', 'dolor_garganta']):
         diagnoses.append('sinusitis')
-    # Neumonía
     if all(s in symptom_str for s in ['fiebre', 'tos', 'dificultad_respirar']):
         diagnoses.append('neumonia')
-    # Bronquitis
     if all(s in symptom_str for s in ['tos', 'dificultad_respirar']):
         diagnoses.append('bronquitis')
-    # Amigdalitis
     if all(s in symptom_str for s in ['dolor_garganta', 'fiebre', 'dificultad_tragar']):
         diagnoses.append('amigdalitis')
-    # COVID-19
     if all(s in symptom_str for s in ['fiebre', 'tos', 'perdida_olfato']):
         diagnoses.append('covid19')
-    # Infección urinaria
     if all(s in symptom_str for s in ['dolor_orinar', 'fiebre']):
         diagnoses.append('infeccion_urinaria')
     
@@ -168,10 +167,9 @@ def get_diagnoses_manual(symptoms):
 def get_diagnosis_info(diagnosis):
     """Get information about a disease directly from Prolog"""
     try:
-        # Hacemos la consulta directa a Prolog
-        for result in prolog.query(f"obtener_informacion({diagnosis}, Info)"):
-            info = result['Info']
-            # pyswip a veces devuelve bytes, decodificamos por seguridad
+        results = list(prolog.query(f"obtener_informacion({diagnosis}, Info)"))
+        if results:
+            info = results[0]['Info']
             if isinstance(info, bytes):
                 return info.decode('utf-8')
             return str(info)
@@ -183,8 +181,9 @@ def get_diagnosis_info(diagnosis):
 def get_diagnosis_triaje(diagnosis):
     """Obtiene el nivel de triaje de la enfermedad desde Prolog"""
     try:
-        for result in prolog.query(f"obtener_triaje({diagnosis}, Nivel)"):
-            return str(result['Nivel'])
+        results = list(prolog.query(f"obtener_triaje({diagnosis}, Nivel)"))
+        if results:
+            return str(results[0]['Nivel'])
     except Exception as e:
         print(f"Error querying Prolog triaje: {e}")
     return 'amarillo'
@@ -192,8 +191,9 @@ def get_diagnosis_triaje(diagnosis):
 def get_diagnosis_specialist(diagnosis):
     """Obtiene el especialista médico recomendado desde Prolog"""
     try:
-        for result in prolog.query(f"obtener_especialista({diagnosis}, Doc)"):
-            doc = result['Doc']
+        results = list(prolog.query(f"obtener_especialista({diagnosis}, Doc)"))
+        if results:
+            doc = results[0]['Doc']
             if isinstance(doc, bytes):
                 return doc.decode('utf-8')
             return str(doc)
@@ -224,7 +224,7 @@ def calculate_confidence(symptoms, diagnosis):
 
 def atom(s):
     """Convert string to Prolog atom"""
-    return s.lower().replace(' ', '_')
+    return str(s).lower().strip().replace(' ', '_')
 
 if __name__ == '__main__':
     print("Starting Python server...")
