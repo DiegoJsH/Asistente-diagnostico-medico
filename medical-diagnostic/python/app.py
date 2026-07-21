@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Python Module - Intermediary between Scala and Prolog
+Python Module - Intermediary between Spring Boot / Scala and Prolog
 Exposes a REST API that queries the Prolog knowledge base
 """
 
@@ -14,13 +14,25 @@ app.config['JSON_AS_ASCII'] = False
 # Initialize Prolog
 prolog = Prolog()
 
-# Load knowledge base ONCE at startup
-knowledge_base_path = os.path.join(os.path.dirname(__file__), 'knowledge_base.pl')
+# Load knowledge base ONCE at startup using relative path
+knowledge_base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'knowledge_base.pl')
+
 try:
-    prolog.consult(knowledge_base_path)
-    print("[Python] Base de conocimientos Prolog cargada exitosamente.")
+    if os.path.exists(knowledge_base_path):
+        prolog.consult(knowledge_base_path)
+        print(f"[Python] Base de conocimientos Prolog cargada exitosamente desde: {knowledge_base_path}")
+    else:
+        print(f"[ERROR] No se encontró el archivo: {knowledge_base_path}")
 except Exception as e:
     print(f"[ERROR] No se pudo cargar la base de conocimientos: {e}")
+
+@app.route('/', methods=['GET'])
+def index():
+    """Root endpoint to check service status"""
+    return jsonify({
+        'status': 'ok',
+        'message': 'API de Diagnóstico Médico (Python - Prolog) lista'
+    }), 200
 
 @app.route('/health', methods=['GET'])
 def health():
@@ -28,7 +40,7 @@ def health():
     return jsonify({
         'status': 'ok',
         'module': 'Python Intermediary',
-        'description': 'Intermediary between Scala and Prolog'
+        'description': 'Intermediary between Spring Boot and Prolog'
     }), 200
 
 @app.route('/diagnose', methods=['POST'])
@@ -93,15 +105,14 @@ def get_symptoms():
     """Return list of available symptoms"""
     symptoms = []
     try:
-        # IMPORTANTE: Usamos list() para evaluar la consulta y CERRAR el puntero en C
+        # Usamos list() para evaluar la consulta y cerrar el puntero C
         results = list(prolog.query('sintoma(X)'))
         for result in results:
             symptoms.append(str(result['X']))
     except Exception as e:
-        print(f"Error getting symptoms: {e}")
+        print(f"Error getting symptoms from Prolog: {e}")
     
     sorted_symptoms = sorted(symptoms)
-    # Enviamos tanto 'symptoms' como 'sintomas_disponibles' para evitar descalces en Scala/JS
     return jsonify({
         'symptoms': sorted_symptoms,
         'sintomas_disponibles': sorted_symptoms,
@@ -117,7 +128,7 @@ def get_diseases():
         for result in results:
             diseases.append(str(result['X']))
     except Exception as e:
-        print(f"Error getting diseases: {e}")
+        print(f"Error getting diseases from Prolog: {e}")
     
     sorted_diseases = sorted(diseases)
     return jsonify({
@@ -227,7 +238,6 @@ def atom(s):
     return str(s).lower().strip().replace(' ', '_')
 
 if __name__ == '__main__':
-    print("Starting Python server...")
-    print("Intermediary module between Scala and Prolog")
-    print("Listening on http://localhost:5000")
-    app.run(host='0.0.0.0', port=5000, debug=False, threaded=False)
+    port = int(os.environ.get("PORT", 5000))
+    print(f"Starting Python server on port {port}...")
+    app.run(host='0.0.0.0', port=port, debug=False, threaded=False)
